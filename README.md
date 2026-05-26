@@ -94,27 +94,27 @@
 
 ```mermaid
 graph TB
-    subgraph Client [Frontend - React and Vite]
+    subgraph FE[Frontend]
         UI[Pages and Components]
         RQ[React Query Cache]
         ZS[Zustand Auth Store]
         AX[Axios and Interceptors]
-        FE[Fetch API - SSE Streams]
+        SSE[Fetch API for SSE]
     end
 
-    subgraph Proxy [Vite Dev Proxy]
-        VP[api routes to localhost 5000]
+    subgraph PX[Vite Dev Proxy]
+        VP[Routes api to port 5000]
     end
 
-    subgraph Server [Backend - Express]
-        MW[Middleware Stack]
-        RT[Route Handlers]
-        CT[Controllers]
-        SV[Services Layer]
-        JB[Background Jobs]
+    subgraph BE[Backend]
+        MWR[Middleware Stack]
+        RTR[Route Handlers]
+        CTR[Controllers]
+        SVR[Services Layer]
+        JBR[Background Jobs]
     end
 
-    subgraph External [External Services]
+    subgraph EX[External Services]
         MDB[(MongoDB Atlas)]
         PC[(Pinecone Vector DB)]
         CLD[(Cloudinary CDN)]
@@ -126,23 +126,23 @@ graph TB
     UI --> ZS
     RQ --> AX
     ZS --> AX
-    UI --> FE
+    UI --> SSE
     AX --> VP
-    FE --> VP
-    VP --> MW
-    MW --> RT
-    RT --> CT
-    CT --> SV
-    SV --> JB
-    SV --> MDB
-    SV --> PC
-    SV --> CLD
-    SV --> GMN
-    GMN -.->|Rate Limited 429 or 503| GRQ
-    JB --> MDB
-    JB --> PC
-    JB --> CLD
-    JB --> GMN
+    SSE --> VP
+    VP --> MWR
+    MWR --> RTR
+    RTR --> CTR
+    CTR --> SVR
+    SVR --> JBR
+    SVR --> MDB
+    SVR --> PC
+    SVR --> CLD
+    SVR --> GMN
+    GMN -.-> GRQ
+    JBR --> MDB
+    JBR --> PC
+    JBR --> CLD
+    JBR --> GMN
 ```
 
 ### Request Flow
@@ -150,54 +150,54 @@ graph TB
 ```mermaid
 sequenceDiagram
     participant U as User Browser
-    participant V as Vite Proxy (:5173)
-    participant E as Express API (:5000)
+    participant V as Vite Proxy
+    participant E as Express API
     participant M as MongoDB
     participant C as Cloudinary
     participant P as Pinecone
-    participant G as Gemini / Groq
+    participant G as Gemini or Groq
 
-    Note over U,G: === Document Upload Flow ===
-    U->>V: POST /api/documents/upload (multipart)
+    Note over U,G: Document Upload Flow
+    U->>V: POST /api/documents/upload
     V->>E: Proxy to backend
-    E->>E: Multer: validate file (≤20MB, PDF/DOCX/IMG)
+    E->>E: Multer validates file
     E->>C: Stream upload to Cloudinary
-    C-->>E: { url, publicId }
-    E->>M: Create Document record (status: queued)
-    E->>E: Queue Agenda job "process-document"
-    E-->>U: 201 { documentId, status: 'queued' }
+    C-->>E: Returns url and publicId
+    E->>M: Create Document record
+    E->>E: Queue Agenda job
+    E-->>U: 201 documentId and status queued
 
-    Note over U,G: === Background Processing ===
-    E->>M: Update status → 'extracting'
+    Note over U,G: Background Processing
+    E->>M: Update status to extracting
     E->>C: Download file buffer
-    E->>E: Extract text (pdf-parse / mammoth / tesseract)
-    E->>M: Update status → 'chunking'
-    E->>E: Split into 500-char chunks (60 overlap)
-    E->>M: Update status → 'embedding'
-    E->>G: Batch embed chunks (Gemini, 768-dim)
-    E->>P: Upsert vectors (batches of 100)
+    E->>E: Extract text
+    E->>M: Update status to chunking
+    E->>E: Split into 500 char chunks
+    E->>M: Update status to embedding
+    E->>G: Batch embed chunks
+    E->>P: Upsert vectors in batches of 100
     E->>M: Save chunks to MongoDB
-    E->>M: Update status → 'analyzing'
+    E->>M: Update status to analyzing
     E->>G: Extract clauses via LLM
-    E->>M: Create alerts (expiry, renewal, red flags)
-    E->>M: Update status → 'ready' (100%)
+    E->>M: Create alerts
+    E->>M: Update status to ready
 
-    Note over U,G: === SSE Status Polling ===
-    U->>E: GET /api/documents/:id/status (EventSource)
+    Note over U,G: SSE Status Polling
+    U->>E: GET /api/documents/:id/status
     loop Every 2 seconds
         E->>M: Poll document status
-        E-->>U: SSE: { status, progress }
+        E-->>U: SSE status and progress
     end
 
-    Note over U,G: === RAG Query Flow ===
-    U->>V: POST /api/query { question }
+    Note over U,G: RAG Query Flow
+    U->>V: POST /api/query
     V->>E: Proxy to backend
-    E->>G: Embed question (768-dim vector)
-    E->>P: Query top-10 similar vectors
+    E->>G: Embed question as 768 dim vector
+    E->>P: Query top 10 similar vectors
     E->>M: Enrich chunks with full text
-    E->>G: LLM rerank (score 0-10, keep ≥5)
+    E->>G: LLM rerank and score 0 to 10
     E->>G: Stream answer with citations
-    E-->>U: SSE: status → answer chunks → sources → done
+    E-->>U: SSE stream answer and sources
 ```
 
 ---
@@ -297,17 +297,17 @@ The UI uses a custom **glassmorphism design system** built on Tailwind CSS:
 ### Layered Architecture
 
 ```mermaid
-graph LR
-    subgraph MW [Middleware Layer]
+graph TD
+    subgraph MWL[Middleware Layer]
         HEL[helmet]
         COR[cors]
         RL[Rate Limiters]
-        AUTH[Auth JWT]
+        AUTHMW[Auth JWT]
         UPL[Multer Upload]
         VAL[Zod Validation]
     end
 
-    subgraph RT [Route Layer]
+    subgraph RTL[Route Layer]
         AR[auth routes]
         DR[document routes]
         QR[query routes]
@@ -315,41 +315,32 @@ graph LR
         DSR[dashboard routes]
     end
 
-    subgraph CT [Controller Layer]
+    subgraph CTL[Controller Layer]
         AC[auth.controller]
         DC[document.controller]
         QC[query.controller]
         ALC[alert.controller]
     end
 
-    subgraph SV [Service Layer]
-        AI[AI Services]
-        RAG[RAG Services]
-        EXT[Extraction Services]
-        VEC[Vector Services]
-        STR[Storage Services]
-        CHK[Chunking Service]
-        CLS[Clause Extractor]
+    subgraph SVL[Service Layer]
+        AIS[AI Services]
+        RAGS[RAG Services]
+        EXTS[Extraction Services]
+        VECS[Vector Services]
+        STRS[Storage Services]
+        CHKS[Chunking Service]
+        CLSS[Clause Extractor]
     end
 
-    subgraph JB [Job Layer]
+    subgraph JBL[Job Layer]
         DJ[document.job]
         AJ[alert.job]
     end
 
-    VAL --> AR
-    VAL --> DR
-    VAL --> QR
-    VAL --> ALR
-    AR --> AC
-    DR --> DC
-    QR --> QC
-    ALR --> ALC
-    AC --> AI
-    DC --> AI
-    DC --> DJ
-    QC --> RAG
-    ALC --> AI
+    MWL --> RTL
+    RTL --> CTL
+    CTL --> SVL
+    CTL --> JBL
 ```
 
 ### Middleware Stack (in order)
@@ -467,20 +458,13 @@ The raw extracted text is cleaned before chunking:
 When a user asks a question, the app executes a **4-stage Retrieval-Augmented Generation pipeline**:
 
 ```mermaid
-graph LR
+graph TD
     Q[User Question]
-    Q --> E[1 - EMBED via Gemini embedding-001 - 768-dim vector]
-    E --> R[2 - RETRIEVE - Pinecone top-10 plus MongoDB enrichment]
-    R --> RR[3 - RERANK - LLM scores 0 to 10 - Keep 5 or above]
-    RR --> A[4 - ANSWER - LLM streams response with source citations]
+    Q --> E[1. Embed Query]
+    E --> R[2. Retrieve from Pinecone]
+    R --> RR[3. Rerank with LLM]
+    RR --> A[4. Stream Answer]
     A --> U[SSE Stream to Browser]
-
-    style Q fill:#4c1d95,stroke:#8b5cf6,color:#fff
-    style E fill:#1e40af,stroke:#3b82f6,color:#fff
-    style R fill:#065f46,stroke:#10b981,color:#fff
-    style RR fill:#92400e,stroke:#f59e0b,color:#fff
-    style A fill:#7c2d12,stroke:#ef4444,color:#fff
-    style U fill:#0f172a,stroke:#64748b,color:#e2e8f0
 ```
 
 ### Stage 1: Embed Query
@@ -549,17 +533,15 @@ data: {"chunksUsed":3}
 ### Document Comparison Pipeline
 
 ```mermaid
-graph LR
-    T[Topic plus 2 Doc IDs] --> EMB[Embed Topic]
-    EMB --> RA[Retrieve Top-5 from Doc A]
-    EMB --> RB[Retrieve Top-5 from Doc B]
+graph TD
+    T[Topic and 2 Doc IDs]
+    T --> EMB[Embed Topic]
+    EMB --> RA[Retrieve Top 5 from Doc A]
+    EMB --> RB[Retrieve Top 5 from Doc B]
     RA --> CTX[Build Combined Context]
     RB --> CTX
-    CTX --> LLM[LLM Generates Comparison]
-    LLM --> RES[Result - Overview - Key Differences - Similarities - Red Flags - Recommendation]
-
-    style T fill:#4c1d95,stroke:#8b5cf6,color:#fff
-    style RES fill:#065f46,stroke:#10b981,color:#fff
+    CTX --> LLMC[LLM Generates Comparison]
+    LLMC --> RES[Structured Result]
 ```
 
 ---
@@ -570,41 +552,41 @@ graph LR
 sequenceDiagram
     participant B as Browser
     participant Z as Zustand Store
-    participant A as API (Axios)
+    participant A as Axios API
     participant S as Express Server
     participant M as MongoDB
 
-    Note over B,M: === Registration / Login ===
-    B->>A: POST /api/auth/login { email, password }
+    Note over B,M: Registration and Login
+    B->>A: POST /api/auth/login
     A->>S: Forward request
     S->>M: Find user by email
-    S->>S: bcrypt.compare(password, hash)
-    S->>S: Sign JWT access (15min) + refresh (7 days)
-    S-->>A: { user, accessToken } + Set-Cookie: refreshToken (httpOnly)
-    A->>Z: setAuth(user, accessToken)
-    Z-->>B: isAuthenticated = true → redirect to /dashboard
+    S->>S: Compare password with bcrypt
+    S->>S: Sign JWT access and refresh tokens
+    S-->>A: Return user and accessToken with cookie
+    A->>Z: setAuth user and accessToken
+    Z-->>B: Redirect to dashboard
 
-    Note over B,M: === Silent Refresh (on app load) ===
-    B->>Z: initialize()
-    Z->>A: POST /api/auth/refresh (with cookie)
+    Note over B,M: Silent Refresh on app load
+    B->>Z: Call initialize
+    Z->>A: POST /api/auth/refresh with cookie
     A->>S: Forward with refreshToken cookie
-    S->>S: jwt.verify(refreshToken, REFRESH_SECRET)
+    S->>S: Verify refresh token
     S->>M: Find user by decoded userId
-    S->>S: Sign new access token (15min)
-    S-->>A: { accessToken, user }
-    A->>Z: setAuth(user, newAccessToken)
+    S->>S: Sign new access token
+    S-->>A: Return new accessToken and user
+    A->>Z: setAuth with new token
 
-    Note over B,M: === Auto-Refresh on 401 ===
-    B->>A: GET /api/documents (expired token)
+    Note over B,M: Auto Refresh on 401
+    B->>A: GET /api/documents with expired token
     A->>S: Forward with expired Bearer token
     S-->>A: 401 Unauthorized
     A->>A: Interceptor catches 401
-    A->>S: POST /api/auth/refresh (cookie)
-    S-->>A: { newAccessToken }
-    A->>Z: setAccessToken(newAccessToken)
-    A->>S: Retry original request with new token
-    S-->>A: 200 { documents }
-    A-->>B: Success
+    A->>S: POST /api/auth/refresh
+    S-->>A: Return new accessToken
+    A->>Z: Update accessToken
+    A->>S: Retry original request
+    S-->>A: 200 Success
+    A-->>B: Return data
 ```
 
 **Key details:**
