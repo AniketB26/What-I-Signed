@@ -92,113 +92,11 @@
 
 ### High-Level Overview
 
-```mermaid
-graph TB
-    subgraph FE[Frontend]
-        UI[Pages and Components]
-        RQ[React Query Cache]
-        ZS[Zustand Auth Store]
-        AX[Axios and Interceptors]
-        SSE[Fetch API for SSE]
-    end
-
-    subgraph PX[Vite Dev Proxy]
-        VP[Routes api to port 5000]
-    end
-
-    subgraph BE[Backend]
-        MWR[Middleware Stack]
-        RTR[Route Handlers]
-        CTR[Controllers]
-        SVR[Services Layer]
-        JBR[Background Jobs]
-    end
-
-    subgraph EX[External Services]
-        MDB[(MongoDB Atlas)]
-        PC[(Pinecone Vector DB)]
-        CLD[(Cloudinary CDN)]
-        GMN[Google Gemini API]
-        GRQ[Groq API]
-    end
-
-    UI --> RQ
-    UI --> ZS
-    RQ --> AX
-    ZS --> AX
-    UI --> SSE
-    AX --> VP
-    SSE --> VP
-    VP --> MWR
-    MWR --> RTR
-    RTR --> CTR
-    CTR --> SVR
-    SVR --> JBR
-    SVR --> MDB
-    SVR --> PC
-    SVR --> CLD
-    SVR --> GMN
-    GMN -.-> GRQ
-    JBR --> MDB
-    JBR --> PC
-    JBR --> CLD
-    JBR --> GMN
-```
+![System Architecture](docs/diagrams/system_architecture.png)
 
 ### Request Flow
 
-```mermaid
-sequenceDiagram
-    participant U as User Browser
-    participant V as Vite Proxy
-    participant E as Express API
-    participant M as MongoDB
-    participant C as Cloudinary
-    participant P as Pinecone
-    participant G as Gemini or Groq
-
-    Note over U,G: Document Upload Flow
-    U->>V: POST /api/documents/upload
-    V->>E: Proxy to backend
-    E->>E: Multer validates file
-    E->>C: Stream upload to Cloudinary
-    C-->>E: Returns url and publicId
-    E->>M: Create Document record
-    E->>E: Queue Agenda job
-    E-->>U: 201 documentId and status queued
-
-    Note over U,G: Background Processing
-    E->>M: Update status to extracting
-    E->>C: Download file buffer
-    E->>E: Extract text
-    E->>M: Update status to chunking
-    E->>E: Split into 500 char chunks
-    E->>M: Update status to embedding
-    E->>G: Batch embed chunks
-    E->>P: Upsert vectors in batches of 100
-    E->>M: Save chunks to MongoDB
-    E->>M: Update status to analyzing
-    E->>G: Extract clauses via LLM
-    E->>M: Create alerts
-    E->>M: Update status to ready
-
-    Note over U,G: SSE Status Polling
-    U->>E: GET /api/documents/:id/status
-    loop Every 2 seconds
-        E->>M: Poll document status
-        E-->>U: SSE status and progress
-    end
-
-    Note over U,G: RAG Query Flow
-    U->>V: POST /api/query
-    V->>E: Proxy to backend
-    E->>G: Embed question as 768 dim vector
-    E->>P: Query top 10 similar vectors
-    E->>M: Enrich chunks with full text
-    E->>G: LLM rerank and score 0 to 10
-    E->>G: Stream answer with citations
-    E-->>U: SSE stream answer and sources
-```
+![Request Flow](docs/diagrams/request_flow.png)
 
 ---
 
@@ -206,45 +104,7 @@ sequenceDiagram
 
 ### Component Tree
 
-```mermaid
-graph TD
-    App[App.jsx]
-    App --> QCP[QueryClientProvider]
-    QCP --> BR[BrowserRouter]
-    BR --> Login[Login]
-    BR --> Register[Register]
-    BR --> PR[ProtectedRoute]
-    PR --> PW[PageWrapper]
-    PW --> SB[Sidebar]
-    PW --> NB[Navbar mobile]
-    PW --> OL[Outlet]
-    OL --> Dash[Dashboard]
-    OL --> Docs[Documents]
-    OL --> DD[DocumentDetail]
-    OL --> Query[Query]
-    OL --> Compare[Compare]
-    OL --> Alerts[Alerts]
-
-    Docs --> UZ[UploadZone]
-    Docs --> DL[DocumentList]
-    DL --> DC[DocumentCards]
-
-    DD --> ST[SummaryTab]
-    DD --> CLT[ClausesTab]
-    DD --> RFT[RedFlagsTab]
-    DD --> AT[AskTab]
-    DD --> PS[ProcessingStatus]
-
-    Query --> QI[QueryInput]
-    Query --> SA[StreamingAnswer]
-    Query --> SC[SourceCitations]
-
-    Alerts --> AC[AlertCards]
-
-    style App fill:#4c1d95,stroke:#8b5cf6,color:#fff
-    style PR fill:#1e3a5f,stroke:#3b82f6,color:#fff
-    style PW fill:#1e3a5f,stroke:#3b82f6,color:#fff
-```
+![Frontend Component Tree](docs/diagrams/frontend_component_tree.png)
 
 ### State Management
 
@@ -296,52 +156,7 @@ The UI uses a custom **glassmorphism design system** built on Tailwind CSS:
 
 ### Layered Architecture
 
-```mermaid
-graph TD
-    subgraph MWL[Middleware Layer]
-        HEL[helmet]
-        COR[cors]
-        RL[Rate Limiters]
-        AUTHMW[Auth JWT]
-        UPL[Multer Upload]
-        VAL[Zod Validation]
-    end
-
-    subgraph RTL[Route Layer]
-        AR[auth routes]
-        DR[document routes]
-        QR[query routes]
-        ALR[alert routes]
-        DSR[dashboard routes]
-    end
-
-    subgraph CTL[Controller Layer]
-        AC[auth.controller]
-        DC[document.controller]
-        QC[query.controller]
-        ALC[alert.controller]
-    end
-
-    subgraph SVL[Service Layer]
-        AIS[AI Services]
-        RAGS[RAG Services]
-        EXTS[Extraction Services]
-        VECS[Vector Services]
-        STRS[Storage Services]
-        CHKS[Chunking Service]
-        CLSS[Clause Extractor]
-    end
-
-    subgraph JBL[Job Layer]
-        DJ[document.job]
-        AJ[alert.job]
-    end
-
-    MWL --> RTL
-    RTL --> CTL
-    CTL --> SVL
-    CTL --> JBL
-```
+![Backend Layered Architecture](docs/diagrams/backend_architecture.png)
 
 ### Middleware Stack (in order)
 
@@ -397,36 +212,7 @@ server/src/services/
 
 When a user uploads a document, it goes through a **10-step background pipeline** managed by Agenda.js:
 
-```mermaid
-graph TD
-    UP[Upload File]
-    UP -->|Multer validates max 20MB| CLD[Upload to Cloudinary]
-    CLD -->|Returns URL and publicId| DB1[Create Document Record - status queued]
-    DB1 -->|Schedule Agenda job| JOB[Background Job Starts]
-
-    JOB --> DL[1 - Download from Cloudinary]
-    DL --> EXT[2 - Extract Text by file type]
-
-    EXT -->|PDF| PDF[pdf-parse extracts text and page count]
-    EXT -->|DOCX| DOCX[mammoth extracts text and estimates pages]
-    EXT -->|Image| OCR[sharp preprocesses then tesseract.js runs OCR]
-
-    PDF --> HASH[3 - SHA-256 Hash for duplicate detection]
-    DOCX --> HASH
-    OCR --> HASH
-
-    HASH --> CHUNK[4 - Chunk Text - 500 chars with 60 overlap]
-    CHUNK --> EMB[5 - Generate Embeddings via Gemini 768-dim]
-    EMB --> PIN[6 - Upsert Vectors to Pinecone in batches of 100]
-    PIN --> SAVE[7 - Save Chunks to MongoDB]
-    SAVE --> CLAUSE[8 - Extract Clauses via LLM]
-    CLAUSE --> ALERT[9 - Create Alerts from key dates]
-    ALERT --> READY[10 - Mark Document Ready]
-
-    style UP fill:#4c1d95,stroke:#8b5cf6,color:#fff
-    style JOB fill:#b45309,stroke:#f59e0b,color:#fff
-    style READY fill:#065f46,stroke:#10b981,color:#fff
-```
+![Document Processing Pipeline](docs/diagrams/document_pipeline.png)
 
 ### Step-by-Step Detail
 
@@ -457,15 +243,7 @@ The raw extracted text is cleaned before chunking:
 
 When a user asks a question, the app executes a **4-stage Retrieval-Augmented Generation pipeline**:
 
-```mermaid
-graph TD
-    Q[User Question]
-    Q --> E[Step 1 - Embed Query]
-    E --> R[Step 2 - Retrieve from Pinecone]
-    R --> RR[Step 3 - Rerank with LLM]
-    RR --> A[Step 4 - Stream Answer]
-    A --> U[SSE Stream to Browser]
-```
+![RAG Query Pipeline](docs/diagrams/rag_query_pipeline.png)
 
 ### Stage 1: Embed Query
 - **Model:** Gemini `embedding-001`
@@ -532,62 +310,13 @@ data: {"chunksUsed":3}
 
 ### Document Comparison Pipeline
 
-```mermaid
-graph TD
-    T[Topic and 2 Doc IDs]
-    T --> EMB[Embed Topic]
-    EMB --> RA[Retrieve Top 5 from Doc A]
-    EMB --> RB[Retrieve Top 5 from Doc B]
-    RA --> CTX[Build Combined Context]
-    RB --> CTX
-    CTX --> COMPARE[LLM Generates Comparison]
-    COMPARE --> RES[Structured Result]
-```
+![Document Comparison Pipeline](docs/diagrams/comparison_pipeline.png)
 
 ---
 
 ## 🔐 Authentication Flow
 
-```mermaid
-sequenceDiagram
-    participant B as Browser
-    participant Z as Zustand Store
-    participant A as Axios API
-    participant S as Express Server
-    participant M as MongoDB
-
-    Note over B,M: Registration and Login
-    B->>A: POST /api/auth/login
-    A->>S: Forward request
-    S->>M: Find user by email
-    S->>S: Compare password with bcrypt
-    S->>S: Sign JWT access and refresh tokens
-    S-->>A: Return user and accessToken with cookie
-    A->>Z: setAuth user and accessToken
-    Z-->>B: Redirect to dashboard
-
-    Note over B,M: Silent Refresh on app load
-    B->>Z: Call initialize
-    Z->>A: POST /api/auth/refresh with cookie
-    A->>S: Forward with refreshToken cookie
-    S->>S: Verify refresh token
-    S->>M: Find user by decoded userId
-    S->>S: Sign new access token
-    S-->>A: Return new accessToken and user
-    A->>Z: setAuth with new token
-
-    Note over B,M: Auto Refresh on 401
-    B->>A: GET /api/documents with expired token
-    A->>S: Forward with expired Bearer token
-    S-->>A: 401 Unauthorized
-    A->>A: Interceptor catches 401
-    A->>S: POST /api/auth/refresh
-    S-->>A: Return new accessToken
-    A->>Z: Update accessToken
-    A->>S: Retry original request
-    S-->>A: 200 Success
-    A-->>B: Return data
-```
+![Authentication Flow](docs/diagrams/auth_flow.png)
 
 **Key details:**
 - **Access token** (15 min): Stored in Zustand memory only — never in localStorage
@@ -601,64 +330,7 @@ sequenceDiagram
 
 ### Entity Relationship Diagram
 
-```mermaid
-erDiagram
-    USER ||--o{ DOCUMENT : uploads
-    USER ||--o{ CHUNK : owns
-    USER ||--o{ ALERT : receives
-    DOCUMENT ||--o{ CHUNK : contains
-    DOCUMENT ||--o{ ALERT : triggers
-
-    USER {
-        string id PK
-        string name
-        string email
-        string passwordHash
-        string plan
-        int docCount
-        bool alertEmail
-        int alertDaysBefore
-    }
-
-    DOCUMENT {
-        string id PK
-        string userId FK
-        string originalName
-        string fileUrl
-        string filePublicId
-        string fileType
-        string status
-        int processingProgress
-        string docType
-        string summary
-        string extractedClauses
-        string rawTextHash
-        int chunkCount
-        int pageCount
-    }
-
-    CHUNK {
-        string id PK
-        string documentId FK
-        string userId FK
-        string text
-        string pineconeId
-        string metadata
-    }
-
-    ALERT {
-        string id PK
-        string userId FK
-        string documentId FK
-        string alertType
-        string message
-        string severity
-        date dueDate
-        bool fired
-        bool dismissed
-        date snoozedUntil
-    }
-```
+![Entity Relationship Diagram](docs/diagrams/er_diagram.png)
 
 ### extractedClauses Schema (Document subdocument)
 
