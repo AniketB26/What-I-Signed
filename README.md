@@ -94,7 +94,7 @@
 
 ```mermaid
 graph TB
-    subgraph Client["Frontend (React + Vite — Port 5173)"]
+    subgraph Client["Frontend (React + Vite - Port 5173)"]
         UI["Pages & Components"]
         RQ["React Query Cache"]
         ZS["Zustand Auth Store"]
@@ -103,10 +103,10 @@ graph TB
     end
 
     subgraph Proxy["Vite Dev Proxy"]
-        VP["/api/* → localhost:5000"]
+        VP["/api/* -> localhost:5000"]
     end
 
-    subgraph Server["Backend (Express — Port 5000)"]
+    subgraph Server["Backend (Express - Port 5000)"]
         MW["Middleware Stack"]
         RT["Route Handlers"]
         CT["Controllers"]
@@ -115,9 +115,9 @@ graph TB
     end
 
     subgraph External["External Services"]
-        MDB[("MongoDB Atlas")]
-        PC[("Pinecone Vector DB")]
-        CLD[("Cloudinary CDN")]
+        MDB[(MongoDB Atlas)]
+        PC[(Pinecone Vector DB)]
+        CLD[(Cloudinary CDN)]
         GMN["Google Gemini API"]
         GRQ["Groq API"]
     end
@@ -413,18 +413,18 @@ When a user uploads a document, it goes through a **10-step background pipeline*
 ```mermaid
 graph TD
     UP["Upload File"]
-    UP -->|"Multer validates\n(≤20MB, PDF/DOCX/IMG)"| CLD["Upload to Cloudinary"]
-    CLD -->|"Returns URL + publicId"| DB1["Create Document Record\n(status: queued)"]
-    DB1 -->|"Schedule Agenda job\n(2s delay)"| JOB["Background Job Starts"]
+    UP -->|"Multer validates (max 20MB, PDF/DOCX/IMG)"| CLD["Upload to Cloudinary"]
+    CLD -->|"Returns URL + publicId"| DB1["Create Document Record - status: queued"]
+    DB1 -->|"Schedule Agenda job (2s delay)"| JOB["Background Job Starts"]
 
     JOB --> DL["1. Download from Cloudinary"]
     DL --> EXT["2. Extract Text"]
 
-    EXT -->|PDF| PDF["pdf-parse\n→ text + pageCount"]
-    EXT -->|DOCX| DOCX["mammoth\n→ text + estimated pages"]
-    EXT -->|Image| OCR["sharp (preprocess)\n→ tesseract.js (OCR)\n→ text"]
+    EXT -->|PDF| PDF["pdf-parse -> text + pageCount"]
+    EXT -->|DOCX| DOCX["mammoth -> text + estimated pages"]
+    EXT -->|Image| OCR["sharp (preprocess) -> tesseract.js (OCR) -> text"]
 
-    PDF --> HASH["3. SHA-256 Hash\n(duplicate detection)"]
+    PDF --> HASH["3. SHA-256 Hash (duplicate detection)"]
     DOCX --> HASH
     OCR --> HASH
 
@@ -473,11 +473,11 @@ When a user asks a question, the app executes a **4-stage Retrieval-Augmented Ge
 ```mermaid
 graph LR
     Q["User Question"]
-    Q --> E["1. EMBED\nGemini embedding-001\n768-dim vector"]
-    E --> R["2. RETRIEVE\nPinecone top-10\n+ MongoDB enrichment"]
-    R --> RR["3. RERANK\nLLM scores 0-10\nKeep ≥5, top 5"]
-    RR --> A["4. ANSWER\nLLM streams response\nwith source citations"]
-    A --> U["SSE Stream\nto Browser"]
+    Q --> E["1. EMBED - Gemini embedding-001 - 768-dim vector"]
+    E --> R["2. RETRIEVE - Pinecone top-10 + MongoDB enrichment"]
+    R --> RR["3. RERANK - LLM scores 0-10 - Keep >= 5, top 5"]
+    RR --> A["4. ANSWER - LLM streams response with source citations"]
+    A --> U["SSE Stream to Browser"]
 
     style Q fill:#4c1d95,stroke:#8b5cf6,color:#fff
     style E fill:#1e40af,stroke:#3b82f6,color:#fff
@@ -555,12 +555,12 @@ data: {"chunksUsed":3}
 ```mermaid
 graph LR
     T["Topic + 2 Doc IDs"] --> EMB["Embed Topic"]
-    EMB --> RA["Retrieve Top-5\nfrom Doc A"]
-    EMB --> RB["Retrieve Top-5\nfrom Doc B"]
-    RA --> CTX["Build Combined\nContext"]
+    EMB --> RA["Retrieve Top-5 from Doc A"]
+    EMB --> RB["Retrieve Top-5 from Doc B"]
+    RA --> CTX["Build Combined Context"]
     RB --> CTX
-    CTX --> LLM["LLM Generates\nComparison"]
-    LLM --> RES["Structured Result:\n• Overview\n• Key Differences\n• Similarities\n• Favorability\n• Red Flags\n• Recommendation"]
+    CTX --> LLM["LLM Generates Comparison"]
+    LLM --> RES["Structured Result: Overview, Key Differences, Similarities, Favorability, Red Flags, Recommendation"]
 
     style T fill:#4c1d95,stroke:#8b5cf6,color:#fff
     style RES fill:#065f46,stroke:#10b981,color:#fff
@@ -636,7 +636,7 @@ erDiagram
         String name
         String email UK
         String passwordHash
-        String plan "free | pro"
+        String plan
         Number docCount
         Boolean preferences_alertEmail
         Number preferences_alertDaysBefore
@@ -648,13 +648,13 @@ erDiagram
         String originalName
         String fileUrl
         String filePublicId
-        String fileType "pdf | image | docx"
-        String status "queued → extracting → chunking → embedding → analyzing → ready | failed"
-        Number processingProgress "0-100"
-        String docType "rental | employment | loan | insurance | nda | ..."
+        String fileType
+        String status
+        Number processingProgress
+        String docType
         String summary
-        Object extractedClauses "parties, dates, penalties, redFlags, ..."
-        String rawTextHash "SHA-256"
+        Object extractedClauses
+        String rawTextHash
         Number chunkCount
         Number pageCount
     }
@@ -665,16 +665,16 @@ erDiagram
         ObjectId userId FK
         String text
         String pineconeId
-        Object metadata "docName, docType, pageNumber, chunkIndex"
+        Object metadata
     }
 
     ALERT {
         ObjectId _id PK
         ObjectId userId FK
         ObjectId documentId FK
-        String alertType "expiry | renewal | notice_deadline | red_flag"
+        String alertType
         String message
-        String severity "info | warning | critical"
+        String severity
         Date dueDate
         Boolean fired
         Boolean dismissed
