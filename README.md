@@ -460,10 +460,10 @@ When a user asks a question, the app executes a **4-stage Retrieval-Augmented Ge
 ```mermaid
 graph TD
     Q[User Question]
-    Q --> E[1. Embed Query]
-    E --> R[2. Retrieve from Pinecone]
-    R --> RR[3. Rerank with LLM]
-    RR --> A[4. Stream Answer]
+    Q --> E[Step 1 - Embed Query]
+    E --> R[Step 2 - Retrieve from Pinecone]
+    R --> RR[Step 3 - Rerank with LLM]
+    RR --> A[Step 4 - Stream Answer]
     A --> U[SSE Stream to Browser]
 ```
 
@@ -540,8 +540,8 @@ graph TD
     EMB --> RB[Retrieve Top 5 from Doc B]
     RA --> CTX[Build Combined Context]
     RB --> CTX
-    CTX --> LLMC[LLM Generates Comparison]
-    LLMC --> RES[Structured Result]
+    CTX --> COMPARE[LLM Generates Comparison]
+    COMPARE --> RES[Structured Result]
 ```
 
 ---
@@ -610,53 +610,53 @@ erDiagram
     DOCUMENT ||--o{ ALERT : triggers
 
     USER {
-        ObjectId _id PK
-        String name
-        String email UK
-        String passwordHash
-        String plan
-        Number docCount
-        Boolean alertEmail
-        Number alertDaysBefore
+        string id PK
+        string name
+        string email
+        string passwordHash
+        string plan
+        int docCount
+        bool alertEmail
+        int alertDaysBefore
     }
 
     DOCUMENT {
-        ObjectId _id PK
-        ObjectId userId FK
-        String originalName
-        String fileUrl
-        String filePublicId
-        String fileType
-        String status
-        Number processingProgress
-        String docType
-        String summary
-        Object extractedClauses
-        String rawTextHash
-        Number chunkCount
-        Number pageCount
+        string id PK
+        string userId FK
+        string originalName
+        string fileUrl
+        string filePublicId
+        string fileType
+        string status
+        int processingProgress
+        string docType
+        string summary
+        string extractedClauses
+        string rawTextHash
+        int chunkCount
+        int pageCount
     }
 
     CHUNK {
-        ObjectId _id PK
-        ObjectId documentId FK
-        ObjectId userId FK
-        String text
-        String pineconeId
-        Object metadata
+        string id PK
+        string documentId FK
+        string userId FK
+        string text
+        string pineconeId
+        string metadata
     }
 
     ALERT {
-        ObjectId _id PK
-        ObjectId userId FK
-        ObjectId documentId FK
-        String alertType
-        String message
-        String severity
-        Date dueDate
-        Boolean fired
-        Boolean dismissed
-        Date snoozedUntil
+        string id PK
+        string userId FK
+        string documentId FK
+        string alertType
+        string message
+        string severity
+        date dueDate
+        bool fired
+        bool dismissed
+        date snoozedUntil
     }
 ```
 
