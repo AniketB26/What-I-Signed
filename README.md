@@ -94,7 +94,7 @@
 
 ```mermaid
 graph TB
-    subgraph Client["🖥️ Frontend (React + Vite — Port 5173)"]
+    subgraph Client["Frontend (React + Vite — Port 5173)"]
         UI["Pages & Components"]
         RQ["React Query Cache"]
         ZS["Zustand Auth Store"]
@@ -106,7 +106,7 @@ graph TB
         VP["/api/* → localhost:5000"]
     end
 
-    subgraph Server["⚙️ Backend (Express — Port 5000)"]
+    subgraph Server["Backend (Express — Port 5000)"]
         MW["Middleware Stack"]
         RT["Route Handlers"]
         CT["Controllers"]
@@ -114,7 +114,7 @@ graph TB
         JB["Background Jobs"]
     end
 
-    subgraph External["☁️ External Services"]
+    subgraph External["External Services"]
         MDB[("MongoDB Atlas")]
         PC[("Pinecone Vector DB")]
         CLD[("Cloudinary CDN")]
@@ -412,10 +412,10 @@ When a user uploads a document, it goes through a **10-step background pipeline*
 
 ```mermaid
 graph TD
-    UP["📤 Upload File"]
-    UP -->|"Multer validates\n(≤20MB, PDF/DOCX/IMG)"| CLD["☁️ Upload to Cloudinary"]
-    CLD -->|"Returns URL + publicId"| DB1["💾 Create Document Record\n(status: queued)"]
-    DB1 -->|"Schedule Agenda job\n(2s delay)"| JOB["⚡ Background Job Starts"]
+    UP["Upload File"]
+    UP -->|"Multer validates\n(≤20MB, PDF/DOCX/IMG)"| CLD["Upload to Cloudinary"]
+    CLD -->|"Returns URL + publicId"| DB1["Create Document Record\n(status: queued)"]
+    DB1 -->|"Schedule Agenda job\n(2s delay)"| JOB["Background Job Starts"]
 
     JOB --> DL["1. Download from Cloudinary"]
     DL --> EXT["2. Extract Text"]
@@ -434,7 +434,7 @@ graph TD
     PIN --> SAVE["7. Save Chunks to MongoDB"]
     SAVE --> CLAUSE["8. Extract Clauses via LLM"]
     CLAUSE --> ALERT["9. Create Alerts"]
-    ALERT --> READY["10. Mark Document Ready ✅"]
+    ALERT --> READY["10. Mark Document Ready"]
 
     style UP fill:#4c1d95,stroke:#8b5cf6,color:#fff
     style JOB fill:#b45309,stroke:#f59e0b,color:#fff
@@ -472,12 +472,12 @@ When a user asks a question, the app executes a **4-stage Retrieval-Augmented Ge
 
 ```mermaid
 graph LR
-    Q["❓ User Question"]
-    Q --> E["1️⃣ EMBED\nGemini embedding-001\n768-dim vector"]
-    E --> R["2️⃣ RETRIEVE\nPinecone top-10\n+ MongoDB enrichment"]
-    R --> RR["3️⃣ RERANK\nLLM scores 0-10\nKeep ≥5, top 5"]
-    RR --> A["4️⃣ ANSWER\nLLM streams response\nwith source citations"]
-    A --> U["📨 SSE Stream\nto Browser"]
+    Q["User Question"]
+    Q --> E["1. EMBED\nGemini embedding-001\n768-dim vector"]
+    E --> R["2. RETRIEVE\nPinecone top-10\n+ MongoDB enrichment"]
+    R --> RR["3. RERANK\nLLM scores 0-10\nKeep ≥5, top 5"]
+    RR --> A["4. ANSWER\nLLM streams response\nwith source citations"]
+    A --> U["SSE Stream\nto Browser"]
 
     style Q fill:#4c1d95,stroke:#8b5cf6,color:#fff
     style E fill:#1e40af,stroke:#3b82f6,color:#fff
