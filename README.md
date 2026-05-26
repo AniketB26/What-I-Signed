@@ -94,32 +94,32 @@
 
 ```mermaid
 graph TB
-    subgraph Client["Frontend (React + Vite - Port 5173)"]
-        UI["Pages & Components"]
-        RQ["React Query Cache"]
-        ZS["Zustand Auth Store"]
-        AX["Axios + Interceptors"]
-        FE["Fetch API (SSE Streams)"]
+    subgraph Client [Frontend - React and Vite]
+        UI[Pages and Components]
+        RQ[React Query Cache]
+        ZS[Zustand Auth Store]
+        AX[Axios and Interceptors]
+        FE[Fetch API - SSE Streams]
     end
 
-    subgraph Proxy["Vite Dev Proxy"]
-        VP["/api/* -> localhost:5000"]
+    subgraph Proxy [Vite Dev Proxy]
+        VP[api routes to localhost 5000]
     end
 
-    subgraph Server["Backend (Express - Port 5000)"]
-        MW["Middleware Stack"]
-        RT["Route Handlers"]
-        CT["Controllers"]
-        SV["Services Layer"]
-        JB["Background Jobs"]
+    subgraph Server [Backend - Express]
+        MW[Middleware Stack]
+        RT[Route Handlers]
+        CT[Controllers]
+        SV[Services Layer]
+        JB[Background Jobs]
     end
 
-    subgraph External["External Services"]
+    subgraph External [External Services]
         MDB[(MongoDB Atlas)]
         PC[(Pinecone Vector DB)]
         CLD[(Cloudinary CDN)]
-        GMN["Google Gemini API"]
-        GRQ["Groq API"]
+        GMN[Google Gemini API]
+        GRQ[Groq API]
     end
 
     UI --> RQ
@@ -138,16 +138,11 @@ graph TB
     SV --> PC
     SV --> CLD
     SV --> GMN
-    GMN -.->|"Rate Limited (429/503)"| GRQ
+    GMN -.->|Rate Limited 429 or 503| GRQ
     JB --> MDB
     JB --> PC
     JB --> CLD
     JB --> GMN
-
-    style Client fill:#1e1b4b,stroke:#7c3aed,color:#e2e8f0
-    style Server fill:#0f172a,stroke:#3b82f6,color:#e2e8f0
-    style External fill:#042f2e,stroke:#14b8a6,color:#e2e8f0
-    style Proxy fill:#1e293b,stroke:#64748b,color:#e2e8f0
 ```
 
 ### Request Flow
@@ -213,38 +208,38 @@ sequenceDiagram
 
 ```mermaid
 graph TD
-    App["App.jsx"]
-    App --> QCP["QueryClientProvider"]
-    QCP --> BR["BrowserRouter"]
-    BR --> Login["Login"]
-    BR --> Register["Register"]
-    BR --> PR["ProtectedRoute"]
-    PR --> PW["PageWrapper"]
-    PW --> SB["Sidebar"]
-    PW --> NB["Navbar (mobile)"]
-    PW --> Outlet["<Outlet />"]
-    Outlet --> Dash["Dashboard"]
-    Outlet --> Docs["Documents"]
-    Outlet --> DD["DocumentDetail"]
-    Outlet --> Query["Query"]
-    Outlet --> Compare["Compare"]
-    Outlet --> Alerts["Alerts"]
+    App[App.jsx]
+    App --> QCP[QueryClientProvider]
+    QCP --> BR[BrowserRouter]
+    BR --> Login[Login]
+    BR --> Register[Register]
+    BR --> PR[ProtectedRoute]
+    PR --> PW[PageWrapper]
+    PW --> SB[Sidebar]
+    PW --> NB[Navbar mobile]
+    PW --> OL[Outlet]
+    OL --> Dash[Dashboard]
+    OL --> Docs[Documents]
+    OL --> DD[DocumentDetail]
+    OL --> Query[Query]
+    OL --> Compare[Compare]
+    OL --> Alerts[Alerts]
 
-    Docs --> UZ["UploadZone"]
-    Docs --> DL["DocumentList"]
-    DL --> DC["DocumentCard[]"]
+    Docs --> UZ[UploadZone]
+    Docs --> DL[DocumentList]
+    DL --> DC[DocumentCards]
 
-    DD --> ST["SummaryTab"]
-    DD --> CLT["ClausesTab"]
-    DD --> RFT["RedFlagsTab"]
-    DD --> AT["AskTab"]
-    DD --> PS["ProcessingStatus"]
+    DD --> ST[SummaryTab]
+    DD --> CLT[ClausesTab]
+    DD --> RFT[RedFlagsTab]
+    DD --> AT[AskTab]
+    DD --> PS[ProcessingStatus]
 
-    Query --> QI["QueryInput"]
-    Query --> SA["StreamingAnswer"]
-    Query --> SC["SourceCitation[]"]
+    Query --> QI[QueryInput]
+    Query --> SA[StreamingAnswer]
+    Query --> SC[SourceCitations]
 
-    Alerts --> AC["AlertCard[]"]
+    Alerts --> AC[AlertCards]
 
     style App fill:#4c1d95,stroke:#8b5cf6,color:#fff
     style PR fill:#1e3a5f,stroke:#3b82f6,color:#fff
@@ -303,57 +298,58 @@ The UI uses a custom **glassmorphism design system** built on Tailwind CSS:
 
 ```mermaid
 graph LR
-    subgraph Middleware["Middleware Layer"]
-        HEL["helmet()"]
-        COR["cors()"]
-        RL["Rate Limiters"]
-        AUTH["Auth (JWT)"]
-        UPL["Multer Upload"]
-        VAL["Zod Validation"]
+    subgraph MW [Middleware Layer]
+        HEL[helmet]
+        COR[cors]
+        RL[Rate Limiters]
+        AUTH[Auth JWT]
+        UPL[Multer Upload]
+        VAL[Zod Validation]
     end
 
-    subgraph Routes["Route Layer"]
-        AR["/api/auth"]
-        DR["/api/documents"]
-        QR["/api/query"]
-        ALR["/api/alerts"]
-        DSR["/api/dashboard"]
+    subgraph RT [Route Layer]
+        AR[auth routes]
+        DR[document routes]
+        QR[query routes]
+        ALR[alert routes]
+        DSR[dashboard routes]
     end
 
-    subgraph Controllers["Controller Layer"]
-        AC["auth.controller"]
-        DC["document.controller"]
-        QC["query.controller"]
-        ALC["alert.controller"]
+    subgraph CT [Controller Layer]
+        AC[auth.controller]
+        DC[document.controller]
+        QC[query.controller]
+        ALC[alert.controller]
     end
 
-    subgraph Services["Service Layer"]
-        AI["AI Services"]
-        RAG["RAG Services"]
-        EXT["Extraction Services"]
-        VEC["Vector Services"]
-        STR["Storage Services"]
-        CHK["Chunking Service"]
-        CLS["Clause Extractor"]
+    subgraph SV [Service Layer]
+        AI[AI Services]
+        RAG[RAG Services]
+        EXT[Extraction Services]
+        VEC[Vector Services]
+        STR[Storage Services]
+        CHK[Chunking Service]
+        CLS[Clause Extractor]
     end
 
-    subgraph Jobs["Job Layer"]
-        DJ["document.job"]
-        AJ["alert.job"]
+    subgraph JB [Job Layer]
+        DJ[document.job]
+        AJ[alert.job]
     end
 
-    Middleware --> Routes
-    Routes --> Controllers
-    Controllers --> Services
-    Controllers --> Jobs
-    Services --> AI
-    Services --> RAG
-
-    style Middleware fill:#1e293b,stroke:#64748b,color:#e2e8f0
-    style Routes fill:#1e1b4b,stroke:#7c3aed,color:#e2e8f0
-    style Controllers fill:#172554,stroke:#3b82f6,color:#e2e8f0
-    style Services fill:#042f2e,stroke:#14b8a6,color:#e2e8f0
-    style Jobs fill:#422006,stroke:#f59e0b,color:#e2e8f0
+    VAL --> AR
+    VAL --> DR
+    VAL --> QR
+    VAL --> ALR
+    AR --> AC
+    DR --> DC
+    QR --> QC
+    ALR --> ALC
+    AC --> AI
+    DC --> AI
+    DC --> DJ
+    QC --> RAG
+    ALC --> AI
 ```
 
 ### Middleware Stack (in order)
@@ -412,29 +408,29 @@ When a user uploads a document, it goes through a **10-step background pipeline*
 
 ```mermaid
 graph TD
-    UP["Upload File"]
-    UP -->|"Multer validates (max 20MB, PDF/DOCX/IMG)"| CLD["Upload to Cloudinary"]
-    CLD -->|"Returns URL + publicId"| DB1["Create Document Record - status: queued"]
-    DB1 -->|"Schedule Agenda job (2s delay)"| JOB["Background Job Starts"]
+    UP[Upload File]
+    UP -->|Multer validates max 20MB| CLD[Upload to Cloudinary]
+    CLD -->|Returns URL and publicId| DB1[Create Document Record - status queued]
+    DB1 -->|Schedule Agenda job| JOB[Background Job Starts]
 
-    JOB --> DL["1. Download from Cloudinary"]
-    DL --> EXT["2. Extract Text"]
+    JOB --> DL[1 - Download from Cloudinary]
+    DL --> EXT[2 - Extract Text by file type]
 
-    EXT -->|PDF| PDF["pdf-parse -> text + pageCount"]
-    EXT -->|DOCX| DOCX["mammoth -> text + estimated pages"]
-    EXT -->|Image| OCR["sharp (preprocess) -> tesseract.js (OCR) -> text"]
+    EXT -->|PDF| PDF[pdf-parse extracts text and page count]
+    EXT -->|DOCX| DOCX[mammoth extracts text and estimates pages]
+    EXT -->|Image| OCR[sharp preprocesses then tesseract.js runs OCR]
 
-    PDF --> HASH["3. SHA-256 Hash (duplicate detection)"]
+    PDF --> HASH[3 - SHA-256 Hash for duplicate detection]
     DOCX --> HASH
     OCR --> HASH
 
-    HASH --> CHUNK["4. Chunk Text"]
-    CHUNK --> EMB["5. Generate Embeddings"]
-    EMB --> PIN["6. Upsert to Pinecone"]
-    PIN --> SAVE["7. Save Chunks to MongoDB"]
-    SAVE --> CLAUSE["8. Extract Clauses via LLM"]
-    CLAUSE --> ALERT["9. Create Alerts"]
-    ALERT --> READY["10. Mark Document Ready"]
+    HASH --> CHUNK[4 - Chunk Text - 500 chars with 60 overlap]
+    CHUNK --> EMB[5 - Generate Embeddings via Gemini 768-dim]
+    EMB --> PIN[6 - Upsert Vectors to Pinecone in batches of 100]
+    PIN --> SAVE[7 - Save Chunks to MongoDB]
+    SAVE --> CLAUSE[8 - Extract Clauses via LLM]
+    CLAUSE --> ALERT[9 - Create Alerts from key dates]
+    ALERT --> READY[10 - Mark Document Ready]
 
     style UP fill:#4c1d95,stroke:#8b5cf6,color:#fff
     style JOB fill:#b45309,stroke:#f59e0b,color:#fff
@@ -472,19 +468,19 @@ When a user asks a question, the app executes a **4-stage Retrieval-Augmented Ge
 
 ```mermaid
 graph LR
-    Q["User Question"]
-    Q --> E["1. EMBED - Gemini embedding-001 - 768-dim vector"]
-    E --> R["2. RETRIEVE - Pinecone top-10 + MongoDB enrichment"]
-    R --> RR["3. RERANK - LLM scores 0-10 - Keep >= 5, top 5"]
-    RR --> A["4. ANSWER - LLM streams response with source citations"]
-    A --> U["SSE Stream to Browser"]
+    Q[User Question]
+    Q --> E[1 - EMBED via Gemini embedding-001 - 768-dim vector]
+    E --> R[2 - RETRIEVE - Pinecone top-10 plus MongoDB enrichment]
+    R --> RR[3 - RERANK - LLM scores 0 to 10 - Keep 5 or above]
+    RR --> A[4 - ANSWER - LLM streams response with source citations]
+    A --> U[SSE Stream to Browser]
 
     style Q fill:#4c1d95,stroke:#8b5cf6,color:#fff
     style E fill:#1e40af,stroke:#3b82f6,color:#fff
     style R fill:#065f46,stroke:#10b981,color:#fff
     style RR fill:#92400e,stroke:#f59e0b,color:#fff
     style A fill:#7c2d12,stroke:#ef4444,color:#fff
-    style U fill:#0f172a,stroke:#64748b,color:#fff
+    style U fill:#0f172a,stroke:#64748b,color:#e2e8f0
 ```
 
 ### Stage 1: Embed Query
@@ -554,13 +550,13 @@ data: {"chunksUsed":3}
 
 ```mermaid
 graph LR
-    T["Topic + 2 Doc IDs"] --> EMB["Embed Topic"]
-    EMB --> RA["Retrieve Top-5 from Doc A"]
-    EMB --> RB["Retrieve Top-5 from Doc B"]
-    RA --> CTX["Build Combined Context"]
+    T[Topic plus 2 Doc IDs] --> EMB[Embed Topic]
+    EMB --> RA[Retrieve Top-5 from Doc A]
+    EMB --> RB[Retrieve Top-5 from Doc B]
+    RA --> CTX[Build Combined Context]
     RB --> CTX
-    CTX --> LLM["LLM Generates Comparison"]
-    LLM --> RES["Structured Result: Overview, Key Differences, Similarities, Favorability, Red Flags, Recommendation"]
+    CTX --> LLM[LLM Generates Comparison]
+    LLM --> RES[Result - Overview - Key Differences - Similarities - Red Flags - Recommendation]
 
     style T fill:#4c1d95,stroke:#8b5cf6,color:#fff
     style RES fill:#065f46,stroke:#10b981,color:#fff
@@ -625,11 +621,11 @@ sequenceDiagram
 
 ```mermaid
 erDiagram
-    USER ||--o{ DOCUMENT : "uploads"
-    USER ||--o{ CHUNK : "owns"
-    USER ||--o{ ALERT : "receives"
-    DOCUMENT ||--o{ CHUNK : "contains"
-    DOCUMENT ||--o{ ALERT : "triggers"
+    USER ||--o{ DOCUMENT : uploads
+    USER ||--o{ CHUNK : owns
+    USER ||--o{ ALERT : receives
+    DOCUMENT ||--o{ CHUNK : contains
+    DOCUMENT ||--o{ ALERT : triggers
 
     USER {
         ObjectId _id PK
@@ -638,8 +634,8 @@ erDiagram
         String passwordHash
         String plan
         Number docCount
-        Boolean preferences_alertEmail
-        Number preferences_alertDaysBefore
+        Boolean alertEmail
+        Number alertDaysBefore
     }
 
     DOCUMENT {
@@ -696,7 +692,7 @@ erDiagram
   monthlyAmount:  String,             // "$15,000"
   redFlags: [{
     clause:       String,             // "Non-compete extends 2 years post-employment"
-    severity:     "low"|"medium"|"high",
+    severity:     "low|medium|high",
     explanation:  String              // "This is unusually long and may limit..."
   }],
   keyDates: [{
@@ -713,8 +709,8 @@ erDiagram
 All endpoints return responses in a consistent shape:
 ```json
 {
-  "success": true | false,
-  "data": { ... } | null,
+  "success": true,
+  "data": {},
   "message": "Human-readable message"
 }
 ```
