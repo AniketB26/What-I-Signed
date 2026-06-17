@@ -15,24 +15,21 @@ import { useDismissAlert, useSnoozeAlert } from '../../hooks/useAlerts';
 const severityConfig = {
   info: {
     icon: Info,
-    bg: 'bg-blue-500/10',
-    border: 'border-blue-500/20',
-    text: 'text-blue-400',
-    glow: 'shadow-blue-500/5',
+    bg: 'bg-blue-50',
+    border: 'border-blue-200',
+    text: 'text-blue-600',
   },
   warning: {
     icon: AlertTriangle,
-    bg: 'bg-amber-500/10',
-    border: 'border-amber-500/20',
-    text: 'text-amber-400',
-    glow: 'shadow-amber-500/5',
+    bg: 'bg-amber-50',
+    border: 'border-amber-200',
+    text: 'text-amber-600',
   },
   critical: {
     icon: AlertCircle,
-    bg: 'bg-rose-500/10',
-    border: 'border-rose-500/20',
-    text: 'text-rose-400',
-    glow: 'shadow-rose-500/5',
+    bg: 'bg-red-50',
+    border: 'border-red-200',
+    text: 'text-red-600',
   },
 };
 
@@ -50,9 +47,9 @@ export default function AlertCard({ alert }) {
   return (
     <div
       className={`
-        glass rounded-2xl overflow-hidden
+        bg-white/80 border border-cream-300/60 rounded-2xl shadow-sm overflow-hidden
         transition-all duration-300
-        hover:shadow-lg ${severity.glow}
+        hover:shadow-md
         hover:-translate-y-0.5
         ${alert.dismissed ? 'opacity-50' : ''}
       `}
@@ -66,7 +63,7 @@ export default function AlertCard({ alert }) {
 
           {/* Content */}
           <div className="flex-1 min-w-0 space-y-2">
-            <p className="text-sm text-slate-200 leading-relaxed">
+            <p className="text-sm text-warm-800 leading-relaxed">
               {alert.message}
             </p>
 
@@ -74,7 +71,7 @@ export default function AlertCard({ alert }) {
             {alert.documentName && (
               <button
                 onClick={() => alert.documentId && navigate(`/documents/${alert.documentId}`)}
-                className="flex items-center gap-1.5 text-xs text-violet-400 hover:text-violet-300 transition-colors group"
+                className="flex items-center gap-1.5 text-xs text-warm-600 hover:text-warm-800 transition-colors group"
               >
                 <FileText size={12} />
                 <span className="group-hover:underline">{alert.documentName}</span>
@@ -83,7 +80,7 @@ export default function AlertCard({ alert }) {
 
             {/* Due date */}
             {dueDate && (
-              <div className={`flex items-center gap-1.5 text-xs ${isOverdue ? 'text-rose-400' : 'text-slate-500'}`}>
+              <div className={`flex items-center gap-1.5 text-xs ${isOverdue ? 'text-red-500' : 'text-warm-400'}`}>
                 <Clock size={12} />
                 <span>
                   {isOverdue ? 'Overdue — ' : ''}

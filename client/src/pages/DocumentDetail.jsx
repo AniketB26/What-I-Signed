@@ -42,11 +42,11 @@ function SummaryTab({ document }) {
       {/* AI Summary */}
       {summary && (
         <Card hover={false}>
-          <h3 className="text-sm font-semibold text-slate-200 mb-3 flex items-center gap-2">
-            <BookOpen size={16} className="text-violet-400" />
+          <h3 className="text-sm font-semibold text-warm-800 mb-3 flex items-center gap-2">
+            <BookOpen size={16} className="text-warm-600" />
             AI Summary
           </h3>
-          <p className="text-sm text-slate-400 leading-relaxed">{summary}</p>
+          <p className="text-sm text-warm-600 leading-relaxed">{summary}</p>
         </Card>
       )}
 
@@ -54,15 +54,15 @@ function SummaryTab({ document }) {
         {/* Parties */}
         {parties.length > 0 && (
           <Card hover={false}>
-            <h3 className="text-sm font-semibold text-slate-200 mb-3 flex items-center gap-2">
-              <Users size={16} className="text-blue-400" />
+            <h3 className="text-sm font-semibold text-warm-800 mb-3 flex items-center gap-2">
+              <Users size={16} className="text-blue-600" />
               Parties
             </h3>
             <div className="space-y-2">
               {parties.map((party, i) => (
                 <div key={i} className="flex items-center gap-2 text-sm">
-                  <div className="w-1.5 h-1.5 rounded-full bg-blue-400" />
-                  <span className="text-slate-300">
+                  <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                  <span className="text-warm-700">
                     {typeof party === 'string' ? party : party.name}
                   </span>
                   {party.role && (
@@ -77,15 +77,15 @@ function SummaryTab({ document }) {
         {/* Key Dates */}
         {keyDates.length > 0 && (
           <Card hover={false}>
-            <h3 className="text-sm font-semibold text-slate-200 mb-3 flex items-center gap-2">
-              <Calendar size={16} className="text-cyan-400" />
+            <h3 className="text-sm font-semibold text-warm-800 mb-3 flex items-center gap-2">
+              <Calendar size={16} className="text-amber-600" />
               Key Dates
             </h3>
             <div className="space-y-2">
               {keyDates.map((item, i) => (
                 <div key={i} className="flex items-center justify-between text-sm">
-                  <span className="text-slate-400">{item.label || item.type}</span>
-                  <span className="text-slate-200 font-medium">
+                  <span className="text-warm-500">{item.label || item.type}</span>
+                  <span className="text-warm-800 font-medium">
                     {item.date ? format(new Date(item.date), 'MMM dd, yyyy') : item.value}
                   </span>
                 </div>
@@ -97,21 +97,21 @@ function SummaryTab({ document }) {
         {/* Financial Terms */}
         {(clauses.depositAmount || clauses.monthlyAmount) && (
           <Card hover={false} className="md:col-span-2">
-            <h3 className="text-sm font-semibold text-slate-200 mb-3 flex items-center gap-2">
-              <DollarSign size={16} className="text-emerald-400" />
+            <h3 className="text-sm font-semibold text-warm-800 mb-3 flex items-center gap-2">
+              <DollarSign size={16} className="text-emerald-600" />
               Financial Terms
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {clauses.depositAmount && (
-                <div className="bg-slate-800/30 rounded-xl p-3">
-                  <p className="text-xs text-slate-500">Deposit</p>
-                  <p className="text-sm font-semibold text-emerald-400 mt-1">{clauses.depositAmount}</p>
+                <div className="bg-cream-100/60 rounded-xl p-3">
+                  <p className="text-xs text-warm-400">Deposit</p>
+                  <p className="text-sm font-semibold text-emerald-700 mt-1">{clauses.depositAmount}</p>
                 </div>
               )}
               {clauses.monthlyAmount && (
-                <div className="bg-slate-800/30 rounded-xl p-3">
-                  <p className="text-xs text-slate-500">Monthly Amount</p>
-                  <p className="text-sm font-semibold text-slate-200 mt-1">{clauses.monthlyAmount}</p>
+                <div className="bg-cream-100/60 rounded-xl p-3">
+                  <p className="text-xs text-warm-400">Monthly Amount</p>
+                  <p className="text-sm font-semibold text-warm-800 mt-1">{clauses.monthlyAmount}</p>
                 </div>
               )}
             </div>
@@ -130,8 +130,8 @@ function ClausesTab({ document }) {
   if (!hasContent) {
     return (
       <div className="text-center py-12 animate-fadeIn">
-        <Shield size={32} className="text-slate-600 mx-auto mb-3" />
-        <p className="text-sm text-slate-500">No clauses extracted yet</p>
+        <Shield size={32} className="text-warm-300 mx-auto mb-3" />
+        <p className="text-sm text-warm-400">No clauses extracted yet</p>
       </div>
     );
   }
@@ -141,12 +141,12 @@ function ClausesTab({ document }) {
       {clauses.noticePeriod && (
         <Card hover={false}>
           <div className="flex items-start gap-3">
-            <div className="flex-shrink-0 h-7 w-7 rounded-lg bg-violet-500/10 flex items-center justify-center">
-              <Shield size={14} className="text-violet-400" />
+            <div className="flex-shrink-0 h-7 w-7 rounded-lg bg-warm-100 flex items-center justify-center">
+              <Shield size={14} className="text-warm-600" />
             </div>
             <div className="flex-1 min-w-0">
-              <h4 className="text-sm font-medium text-slate-200 mb-1">Notice Period</h4>
-              <p className="text-xs text-slate-400 leading-relaxed">{clauses.noticePeriod}</p>
+              <h4 className="text-sm font-medium text-warm-800 mb-1">Notice Period</h4>
+              <p className="text-xs text-warm-500 leading-relaxed">{clauses.noticePeriod}</p>
             </div>
           </div>
         </Card>
@@ -154,12 +154,12 @@ function ClausesTab({ document }) {
       {clauses.autoRenewal !== undefined && (
         <Card hover={false}>
           <div className="flex items-start gap-3">
-            <div className="flex-shrink-0 h-7 w-7 rounded-lg bg-blue-500/10 flex items-center justify-center">
-              <Shield size={14} className="text-blue-400" />
+            <div className="flex-shrink-0 h-7 w-7 rounded-lg bg-blue-50 flex items-center justify-center">
+              <Shield size={14} className="text-blue-600" />
             </div>
             <div className="flex-1 min-w-0">
-              <h4 className="text-sm font-medium text-slate-200 mb-1">Auto Renewal</h4>
-              <p className="text-xs text-slate-400 leading-relaxed">{clauses.autoRenewal ? 'Yes' : 'No'}</p>
+              <h4 className="text-sm font-medium text-warm-800 mb-1">Auto Renewal</h4>
+              <p className="text-xs text-warm-500 leading-relaxed">{clauses.autoRenewal ? 'Yes' : 'No'}</p>
             </div>
           </div>
         </Card>
@@ -167,12 +167,12 @@ function ClausesTab({ document }) {
       {penaltyClauses.map((clause, i) => (
         <Card key={i} hover={false}>
           <div className="flex items-start gap-3">
-            <div className="flex-shrink-0 h-7 w-7 rounded-lg bg-violet-500/10 flex items-center justify-center">
-              <span className="text-xs font-semibold text-violet-400">{i + 1}</span>
+            <div className="flex-shrink-0 h-7 w-7 rounded-lg bg-warm-100 flex items-center justify-center">
+              <span className="text-xs font-semibold text-warm-600">{i + 1}</span>
             </div>
             <div className="flex-1 min-w-0">
-              <h4 className="text-sm font-medium text-slate-200 mb-1">Penalty Clause</h4>
-              <p className="text-xs text-slate-400 leading-relaxed">{clause}</p>
+              <h4 className="text-sm font-medium text-warm-800 mb-1">Penalty Clause</h4>
+              <p className="text-xs text-warm-500 leading-relaxed">{clause}</p>
             </div>
           </div>
         </Card>
@@ -188,16 +188,16 @@ function RedFlagsTab({ document }) {
     return (
       <div className="text-center py-12 animate-fadeIn">
         <AlertTriangle size={32} className="text-emerald-600 mx-auto mb-3" />
-        <p className="text-sm text-emerald-400 font-medium">No red flags detected</p>
-        <p className="text-xs text-slate-500 mt-1">This document looks clean!</p>
+        <p className="text-sm text-emerald-700 font-medium">No red flags detected</p>
+        <p className="text-xs text-warm-400 mt-1">This document looks clean!</p>
       </div>
     );
   }
 
   const severityColors = {
-    high: { bg: 'bg-rose-500/10', border: 'border-rose-500/20', text: 'text-rose-400' },
-    medium: { bg: 'bg-amber-500/10', border: 'border-amber-500/20', text: 'text-amber-400' },
-    low: { bg: 'bg-blue-500/10', border: 'border-blue-500/20', text: 'text-blue-400' },
+    high: { bg: 'bg-red-50', border: 'border-red-200', text: 'text-red-600' },
+    medium: { bg: 'bg-amber-50', border: 'border-amber-200', text: 'text-amber-600' },
+    low: { bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-600' },
   };
 
   return (
@@ -205,14 +205,14 @@ function RedFlagsTab({ document }) {
       {redFlags.map((flag, i) => {
         const colors = severityColors[flag.severity] || severityColors.medium;
         return (
-          <div key={i} className={`glass rounded-xl p-4 border ${colors.border}`}>
+          <div key={i} className={`bg-white/80 rounded-xl p-4 border ${colors.border} shadow-sm`}>
             <div className="flex items-start gap-3">
               <div className={`p-2 rounded-lg ${colors.bg} flex-shrink-0`}>
                 <AlertTriangle size={16} className={colors.text} />
               </div>
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <h4 className="text-sm font-medium text-slate-200">
+                  <h4 className="text-sm font-medium text-warm-800">
                     {flag.clause || 'Warning'}
                   </h4>
                   {flag.severity && (
@@ -221,7 +221,7 @@ function RedFlagsTab({ document }) {
                     </Badge>
                   )}
                 </div>
-                <p className="text-xs text-slate-400 leading-relaxed">{flag.explanation || ''}</p>
+                <p className="text-xs text-warm-500 leading-relaxed">{flag.explanation || ''}</p>
               </div>
             </div>
           </div>
@@ -273,9 +273,9 @@ export default function DocumentDetail() {
   if (error || !document) {
     return (
       <div className="text-center py-20 animate-fadeIn">
-        <FileText size={48} className="text-slate-600 mx-auto mb-4" />
-        <h2 className="text-lg font-semibold text-slate-200 mb-2">Document not found</h2>
-        <p className="text-sm text-slate-500 mb-4">The document you're looking for doesn't exist.</p>
+        <FileText size={48} className="text-warm-300 mx-auto mb-4" />
+        <h2 className="text-lg font-semibold text-warm-800 mb-2">Document not found</h2>
+        <p className="text-sm text-warm-400 mb-4">The document you're looking for doesn't exist.</p>
         <Button onClick={() => navigate('/documents')} variant="secondary" icon={ArrowLeft}>
           Back to Documents
         </Button>
@@ -290,28 +290,28 @@ export default function DocumentDetail() {
       {/* Back button */}
       <button
         onClick={() => navigate('/documents')}
-        className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors group"
+        className="flex items-center gap-2 text-sm text-warm-500 hover:text-warm-800 transition-colors group"
       >
         <ArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
         Back to Documents
       </button>
 
       {/* Header */}
-      <div className="glass rounded-2xl p-6">
+      <div className="bg-white/80 border border-cream-300/60 rounded-2xl shadow-sm p-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="p-3 rounded-xl bg-gradient-to-br from-violet-600/20 to-blue-500/20">
-              <FileText size={24} className="text-violet-400" />
+            <div className="p-3 rounded-xl bg-warm-100">
+              <FileText size={24} className="text-warm-600" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-slate-100">
+              <h1 className="text-xl font-bold text-warm-900">
                 {document.originalName || document.name}
               </h1>
               <div className="flex flex-wrap items-center gap-2 mt-2">
                 {document.docType && <Badge docType={document.docType} />}
                 <Badge status={document.status} />
                 {document.createdAt && (
-                  <span className="flex items-center gap-1 text-xs text-slate-500">
+                  <span className="flex items-center gap-1 text-xs text-warm-400">
                     <Clock size={12} />
                     {formatDistanceToNow(new Date(document.createdAt), { addSuffix: true })}
                   </span>
@@ -322,7 +322,7 @@ export default function DocumentDetail() {
         </div>
 
         {isProcessing && (
-          <div className="mt-4 pt-4 border-t border-slate-700/50">
+          <div className="mt-4 pt-4 border-t border-cream-300/50">
             <ProcessingStatus documentId={document._id} />
           </div>
         )}
@@ -331,7 +331,7 @@ export default function DocumentDetail() {
       {/* Tabs */}
       {!isProcessing && (
         <>
-          <div className="flex gap-1 bg-slate-900/30 backdrop-blur-sm rounded-xl p-1 border border-slate-700/30">
+          <div className="flex gap-1 bg-white/60 rounded-xl p-1 border border-cream-300/60">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
@@ -340,8 +340,8 @@ export default function DocumentDetail() {
                   flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium
                   transition-all duration-200
                   ${activeTab === tab.id
-                    ? 'bg-gradient-to-r from-violet-600/20 to-blue-500/20 text-white border border-violet-500/20'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/30'
+                    ? 'bg-warm-700 text-white shadow-sm'
+                    : 'text-warm-500 hover:text-warm-800 hover:bg-cream-200/60'
                   }
                 `}
               >

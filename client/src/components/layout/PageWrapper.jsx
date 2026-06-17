@@ -8,12 +8,11 @@ export default function PageWrapper() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-slate-950">
-      {/* Ambient background orbs */}
+    <div className="min-h-screen bg-parchment">
+      {/* Ambient warm background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-violet-600/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-cyan-600/3 rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-amber-200/20 via-orange-100/10 to-transparent rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-amber-100/15 via-cream-300/10 to-transparent rounded-full blur-3xl" />
       </div>
 
       {/* Desktop Sidebar */}
@@ -34,7 +33,7 @@ export default function PageWrapper() {
       {mobileMenuOpen && (
         <div className="md:hidden fixed inset-0 z-30">
           <div
-            className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-warm-900/30 backdrop-blur-sm"
             onClick={() => setMobileMenuOpen(false)}
           />
           <div className="relative z-10">

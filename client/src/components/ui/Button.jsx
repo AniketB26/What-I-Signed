@@ -2,15 +2,15 @@ import { Loader2 } from 'lucide-react';
 
 const variants = {
   primary:
-    'bg-gradient-to-r from-violet-600 to-blue-500 text-white hover:from-violet-500 hover:to-blue-400 shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40',
+    'bg-warm-700 text-white hover:bg-warm-800 shadow-sm hover:shadow-md',
   secondary:
-    'glass text-slate-200 hover:bg-slate-800/60 hover:text-white',
+    'bg-white/80 border border-cream-300 text-warm-700 hover:bg-cream-100 hover:text-warm-900',
   danger:
-    'bg-gradient-to-r from-rose-600 to-red-500 text-white hover:from-rose-500 hover:to-red-400 shadow-lg shadow-rose-500/25',
+    'bg-red-600 text-white hover:bg-red-700 shadow-sm',
   ghost:
-    'bg-transparent text-slate-400 hover:text-white hover:bg-slate-800/50',
+    'bg-transparent text-warm-500 hover:text-warm-900 hover:bg-cream-200/60',
   outline:
-    'border border-slate-600 text-slate-300 hover:border-violet-500 hover:text-violet-400 hover:bg-violet-500/10',
+    'border border-warm-400 text-warm-600 hover:border-warm-600 hover:text-warm-700 hover:bg-warm-50',
 };
 
 const sizes = {

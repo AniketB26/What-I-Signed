@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDocuments } from '../hooks/useDocuments';
 import { useCompareDocuments } from '../hooks/useQuery';
-import { FileText, ArrowLeftRight, Loader2 } from 'lucide-react';
+import { FileText, ArrowLeftRight, Loader2, Eye, Download } from 'lucide-react';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 import EmptyState from '../components/ui/EmptyState';
@@ -16,6 +16,9 @@ export default function Compare() {
   const docList = documents?.data?.documents || documents?.documents || (Array.isArray(documents) ? documents : []);
   const readyDocs = docList.filter(d => d.status === 'ready');
 
+  const selectedDocA = readyDocs.find(d => d._id === docIdA);
+  const selectedDocB = readyDocs.find(d => d._id === docIdB);
+
   const handleCompare = (e) => {
     e.preventDefault();
     if (!docIdA || !docIdB || !topic.trim()) return;
@@ -25,10 +28,10 @@ export default function Compare() {
   return (
     <div className="space-y-8 animate-fadeIn">
       <div>
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent">
-          Compare Documents
+        <h1 className="text-2xl font-bold text-warm-900">
+          Document Comparison – Professional View
         </h1>
-        <p className="text-slate-400 mt-2">
+        <p className="text-sm text-warm-500 mt-2">
           See how two agreements differ on a specific topic
         </p>
       </div>
@@ -38,13 +41,13 @@ export default function Compare() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Document A */}
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-300">
+              <label className="block text-sm font-medium text-warm-700">
                 Document A
               </label>
               <select
                 value={docIdA}
                 onChange={(e) => setDocIdA(e.target.value)}
-                className="w-full bg-slate-800/50 border border-slate-700/50 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 transition-all"
+                className="w-full bg-white/80 border border-cream-300 rounded-xl px-4 py-3 text-warm-800 focus:outline-none focus:ring-2 focus:ring-warm-500/30 focus:border-warm-500 transition-all"
               >
                 <option value="">Select a document...</option>
                 {readyDocs.map(doc => (
@@ -57,13 +60,13 @@ export default function Compare() {
 
             {/* Document B */}
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-300">
+              <label className="block text-sm font-medium text-warm-700">
                 Document B
               </label>
               <select
                 value={docIdB}
                 onChange={(e) => setDocIdB(e.target.value)}
-                className="w-full bg-slate-800/50 border border-slate-700/50 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 transition-all"
+                className="w-full bg-white/80 border border-cream-300 rounded-xl px-4 py-3 text-warm-800 focus:outline-none focus:ring-2 focus:ring-warm-500/30 focus:border-warm-500 transition-all"
               >
                 <option value="">Select a document...</option>
                 {readyDocs.map(doc => (
@@ -77,7 +80,7 @@ export default function Compare() {
 
           {/* Comparison Topic */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-slate-300">
+            <label className="block text-sm font-medium text-warm-700">
               What do you want to compare?
             </label>
             <div className="relative">
@@ -86,7 +89,7 @@ export default function Compare() {
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
                 placeholder="e.g., maintenance responsibilities, termination clauses, payment terms..."
-                className="w-full bg-slate-800/50 border border-slate-700/50 rounded-xl px-4 py-3 text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 transition-all"
+                className="w-full bg-white/80 border border-cream-300 rounded-xl px-4 py-3 text-warm-800 placeholder-warm-400 focus:outline-none focus:ring-2 focus:ring-warm-500/30 focus:border-warm-500 transition-all"
               />
             </div>
           </div>
@@ -109,24 +112,69 @@ export default function Compare() {
       {isPending && (
         <Card>
           <div className="flex items-center justify-center py-12 space-x-3">
-            <Loader2 className="w-6 h-6 text-violet-400 animate-spin" />
-            <span className="text-slate-400">Analyzing and comparing documents...</span>
+            <Loader2 className="w-6 h-6 text-warm-500 animate-spin" />
+            <span className="text-warm-500">Analyzing and comparing documents...</span>
           </div>
         </Card>
       )}
 
       {result?.data && (
-        <Card>
-          <div className="p-6 space-y-4 animate-slideUp">
-            <h2 className="text-xl font-semibold text-slate-100 flex items-center gap-2">
-              <ArrowLeftRight className="w-5 h-5 text-violet-400" />
-              Comparison Results
-            </h2>
-            <div className="prose prose-invert max-w-none text-slate-300 leading-relaxed whitespace-pre-wrap">
-              {result.data.comparison}
-            </div>
+        <div className="space-y-6 animate-slideUp">
+          {/* Document headers */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {selectedDocA && (
+              <div className="bg-white/80 border border-cream-300/60 rounded-xl p-4 shadow-sm flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-warm-100">
+                    <FileText size={16} className="text-warm-600" />
+                  </div>
+                  <span className="text-sm font-medium text-warm-800 truncate">{selectedDocA.originalName}</span>
+                </div>
+                <div className="flex gap-2">
+                  <button className="flex items-center gap-1 text-xs text-warm-600 hover:text-warm-800 bg-cream-100 px-2.5 py-1.5 rounded-lg transition-colors">
+                    <Eye size={12} /> View
+                  </button>
+                  <button className="flex items-center gap-1 text-xs text-white bg-warm-700 hover:bg-warm-800 px-2.5 py-1.5 rounded-lg transition-colors">
+                    <Download size={12} /> Download
+                  </button>
+                </div>
+              </div>
+            )}
+            {selectedDocB && (
+              <div className="bg-white/80 border border-cream-300/60 rounded-xl p-4 shadow-sm flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-warm-100">
+                    <FileText size={16} className="text-warm-600" />
+                  </div>
+                  <span className="text-sm font-medium text-warm-800 truncate">{selectedDocB.originalName}</span>
+                </div>
+                <div className="flex gap-2">
+                  <button className="flex items-center gap-1 text-xs text-warm-600 hover:text-warm-800 bg-cream-100 px-2.5 py-1.5 rounded-lg transition-colors">
+                    <Eye size={12} /> View
+                  </button>
+                  <button className="flex items-center gap-1 text-xs text-white bg-warm-700 hover:bg-warm-800 px-2.5 py-1.5 rounded-lg transition-colors">
+                    <Download size={12} /> Download
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
-        </Card>
+
+          {/* Comparison Results */}
+          <Card>
+            <div className="p-6 space-y-4">
+              <h2 className="text-lg font-semibold text-warm-900 flex items-center gap-2">
+                Key Differences & Analysis
+              </h2>
+              <div className="border-b border-cream-300/50 pb-2 mb-4">
+                <h3 className="text-sm font-semibold text-warm-800">Summary</h3>
+              </div>
+              <div className="text-sm text-warm-700 leading-relaxed whitespace-pre-wrap">
+                {result.data.comparison}
+              </div>
+            </div>
+          </Card>
+        </div>
       )}
 
       {!isPending && !result && readyDocs.length < 2 && (

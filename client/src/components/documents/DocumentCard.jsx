@@ -31,11 +31,11 @@ export default function DocumentCard({ document }) {
       <div
         onClick={handleClick}
         className={`
-          glass rounded-2xl overflow-hidden
+          bg-white/80 border border-cream-300/60 rounded-2xl shadow-sm overflow-hidden
           transition-all duration-300 ease-out group
           ${isProcessing
             ? 'cursor-default'
-            : 'cursor-pointer hover:border-violet-500/30 hover:shadow-lg hover:shadow-violet-500/5 hover:-translate-y-0.5'
+            : 'cursor-pointer hover:border-warm-400/50 hover:shadow-md hover:-translate-y-0.5'
           }
         `}
       >
@@ -45,15 +45,15 @@ export default function DocumentCard({ document }) {
             <div className="flex items-center gap-3 min-w-0">
               <div className={`
                 p-2.5 rounded-xl flex-shrink-0 transition-colors
-                ${isProcessing ? 'bg-amber-500/10' : 'bg-violet-500/10 group-hover:bg-violet-500/20'}
+                ${isProcessing ? 'bg-amber-50' : 'bg-warm-100 group-hover:bg-warm-200/60'}
               `}>
-                <FileText size={18} className={isProcessing ? 'text-amber-400' : 'text-violet-400'} />
+                <FileText size={18} className={isProcessing ? 'text-amber-600' : 'text-warm-600'} />
               </div>
               <div className="min-w-0">
-                <h3 className="text-sm font-semibold text-slate-200 truncate group-hover:text-white transition-colors">
+                <h3 className="text-sm font-semibold text-warm-900 truncate group-hover:text-warm-800 transition-colors">
                   {document.originalName || document.name}
                 </h3>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-xs text-warm-400 mt-0.5">
                   {document.createdAt
                     ? formatDistanceToNow(new Date(document.createdAt), { addSuffix: true })
                     : 'Recently'}
@@ -67,7 +67,7 @@ export default function DocumentCard({ document }) {
                 e.stopPropagation();
                 setShowDeleteModal(true);
               }}
-              className="p-1.5 rounded-lg text-slate-600 hover:text-rose-400 hover:bg-rose-500/10 transition-all opacity-0 group-hover:opacity-100"
+              className="p-1.5 rounded-lg text-warm-300 hover:text-red-500 hover:bg-red-50 transition-all opacity-0 group-hover:opacity-100"
             >
               <Trash2 size={14} />
             </button>
@@ -85,7 +85,7 @@ export default function DocumentCard({ document }) {
           ) : (
             <>
               {document.analysis?.summary && (
-                <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed mb-3">
+                <p className="text-xs text-warm-500 line-clamp-2 leading-relaxed mb-3">
                   {document.analysis.summary}
                 </p>
               )}
@@ -93,8 +93,8 @@ export default function DocumentCard({ document }) {
               {/* Red flags */}
               {document.analysis?.redFlags?.length > 0 && (
                 <div className="flex items-center gap-1.5 text-xs">
-                  <AlertTriangle size={12} className="text-rose-400" />
-                  <span className="text-rose-400 font-medium">
+                  <AlertTriangle size={12} className="text-red-500" />
+                  <span className="text-red-500 font-medium">
                     {document.analysis.redFlags.length} red flag{document.analysis.redFlags.length > 1 ? 's' : ''}
                   </span>
                 </div>
@@ -112,9 +112,9 @@ export default function DocumentCard({ document }) {
         size="sm"
       >
         <div className="space-y-4">
-          <p className="text-sm text-slate-300">
+          <p className="text-sm text-warm-700">
             Are you sure you want to delete{' '}
-            <span className="font-semibold text-white">
+            <span className="font-semibold text-warm-900">
               {document.originalName || document.name}
             </span>
             ? This action cannot be undone.

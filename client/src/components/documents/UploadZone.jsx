@@ -57,10 +57,10 @@ export default function UploadZone() {
           transition-all duration-300 cursor-pointer
           group overflow-hidden
           ${isDragActive && !isDragReject
-            ? 'border-violet-500 bg-violet-500/10 scale-[1.01]'
+            ? 'border-warm-600 bg-warm-100/50 scale-[1.01]'
             : isDragReject
-            ? 'border-rose-500 bg-rose-500/10'
-            : 'border-slate-700/50 hover:border-violet-500/50 hover:bg-slate-900/30'
+            ? 'border-red-400 bg-red-50'
+            : 'border-cream-400 hover:border-warm-500 hover:bg-cream-100/50'
           }
           ${isUploading ? 'pointer-events-none opacity-60' : ''}
         `}
@@ -71,26 +71,26 @@ export default function UploadZone() {
           <div className={`
             p-4 rounded-2xl mb-4 transition-all duration-300
             ${isDragActive
-              ? 'bg-violet-500/20 scale-110'
-              : 'bg-slate-800/50 group-hover:bg-violet-500/10 group-hover:scale-105'
+              ? 'bg-warm-200/60 scale-110'
+              : 'bg-cream-200/60 group-hover:bg-warm-100 group-hover:scale-105'
             }
           `}>
             <Upload
               size={28}
               className={`
                 transition-all duration-300
-                ${isDragActive ? 'text-violet-400' : 'text-slate-400 group-hover:text-violet-400'}
+                ${isDragActive ? 'text-warm-600' : 'text-warm-400 group-hover:text-warm-600'}
               `}
             />
           </div>
 
-          <p className="text-sm font-medium text-slate-200 mb-1">
+          <p className="text-sm font-medium text-warm-800 mb-1">
             {isDragActive ? 'Drop your document here' : 'Drag & drop your document'}
           </p>
-          <p className="text-xs text-slate-500">
-            or <span className="text-violet-400 group-hover:underline">browse files</span>
+          <p className="text-xs text-warm-400">
+            or <span className="text-warm-600 group-hover:underline">browse files</span>
           </p>
-          <p className="text-xs text-slate-600 mt-2">
+          <p className="text-xs text-warm-400 mt-2">
             PDF, DOCX, or TXT • Max 25MB
           </p>
         </div>
@@ -98,16 +98,16 @@ export default function UploadZone() {
 
       {/* Selected file preview */}
       {selectedFile && (
-        <div className="glass rounded-xl p-4 animate-slideUp">
+        <div className="bg-white/80 border border-cream-300/60 rounded-xl p-4 shadow-sm animate-slideUp">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-violet-500/10">
-              <FileText size={20} className="text-violet-400" />
+            <div className="p-2.5 rounded-xl bg-warm-100">
+              <FileText size={20} className="text-warm-600" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-slate-200 truncate">
+              <p className="text-sm font-medium text-warm-800 truncate">
                 {selectedFile.name}
               </p>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-warm-400">
                 {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
               </p>
             </div>
@@ -115,7 +115,7 @@ export default function UploadZone() {
             {!isUploading && (
               <button
                 onClick={removeFile}
-                className="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition-all"
+                className="p-1.5 rounded-lg text-warm-400 hover:text-red-500 hover:bg-red-50 transition-all"
               >
                 <X size={16} />
               </button>
@@ -125,13 +125,13 @@ export default function UploadZone() {
           {/* Progress bar */}
           {isUploading && (
             <div className="mt-3 space-y-1.5">
-              <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
+              <div className="h-1.5 bg-cream-200 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-violet-500 to-blue-500 rounded-full transition-all duration-500 ease-out"
+                  className="h-full bg-warm-600 rounded-full transition-all duration-500 ease-out"
                   style={{ width: `${uploadProgress}%` }}
                 />
               </div>
-              <p className="text-xs text-slate-400 text-right">{uploadProgress}%</p>
+              <p className="text-xs text-warm-400 text-right">{uploadProgress}%</p>
             </div>
           )}
 

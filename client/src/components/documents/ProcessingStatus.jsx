@@ -27,8 +27,8 @@ export default function ProcessingStatus({ documentId }) {
     return (
       <div className="space-y-2">
         <div className="flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full bg-rose-500" />
-          <span className="text-xs text-rose-400 font-medium">Processing failed</span>
+          <div className="h-2 w-2 rounded-full bg-red-500" />
+          <span className="text-xs text-red-500 font-medium">Processing failed</span>
         </div>
       </div>
     );
@@ -38,14 +38,14 @@ export default function ProcessingStatus({ documentId }) {
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Loader2 size={12} className="text-violet-400 animate-spin" />
-          <span className="text-xs text-slate-300 font-medium">{stage.label}</span>
+          <Loader2 size={12} className="text-warm-500 animate-spin" />
+          <span className="text-xs text-warm-700 font-medium">{stage.label}</span>
         </div>
-        <span className="text-xs text-slate-500">{displayProgress}%</span>
+        <span className="text-xs text-warm-400">{displayProgress}%</span>
       </div>
-      <div className="h-1 bg-slate-800 rounded-full overflow-hidden">
+      <div className="h-1 bg-cream-200 rounded-full overflow-hidden">
         <div
-          className="h-full bg-gradient-to-r from-violet-500 to-cyan-400 rounded-full transition-all duration-1000 ease-out"
+          className="h-full bg-warm-600 rounded-full transition-all duration-1000 ease-out"
           style={{ width: `${displayProgress}%` }}
         />
       </div>

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Mail, Lock, User, Shield, ArrowRight } from 'lucide-react';
+import { Mail, Lock, User, ArrowRight } from 'lucide-react';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
 import { authService } from '../services/auth';
@@ -52,28 +52,27 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-slate-950 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-parchment relative overflow-hidden">
       {/* Ambient orbs */}
-      <div className="absolute top-20 -right-32 w-96 h-96 bg-violet-600/10 rounded-full blur-3xl animate-float" />
-      <div className="absolute -bottom-20 -left-32 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '1.5s' }} />
-      <div className="absolute top-1/3 left-1/3 w-48 h-48 bg-cyan-600/5 rounded-full blur-3xl" />
+      <div className="absolute top-20 -right-32 w-96 h-96 bg-amber-200/20 rounded-full blur-3xl animate-float" />
+      <div className="absolute -bottom-20 -left-32 w-96 h-96 bg-orange-100/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '1.5s' }} />
 
       <div className="w-full max-w-md relative z-10 animate-slideUp">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-gradient-to-br from-violet-600 to-blue-500 shadow-xl shadow-violet-500/25 mb-4">
-            <Shield size={28} className="text-white" />
+          <div className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-emerald-700 shadow-lg mb-4">
+            <span className="text-white font-bold text-2xl">W</span>
           </div>
-          <h1 className="text-2xl font-bold gradient-text mb-1">
+          <h1 className="text-2xl font-bold text-warm-900 mb-1">
             What Did I Sign?
           </h1>
-          <p className="text-sm text-slate-500">Your personal agreement vault</p>
+          <p className="text-sm text-warm-500">Your personal agreement vault</p>
         </div>
 
         {/* Form Card */}
-        <div className="glass-strong rounded-2xl p-8">
-          <h2 className="text-lg font-semibold text-slate-100 mb-1">Create your account</h2>
-          <p className="text-sm text-slate-500 mb-6">Start securing your agreements</p>
+        <div className="bg-white/90 border border-cream-300/60 shadow-lg rounded-2xl p-8">
+          <h2 className="text-lg font-semibold text-warm-900 mb-1">Create your account</h2>
+          <p className="text-sm text-warm-500 mb-6">Start securing your agreements</p>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <Input
@@ -124,11 +123,11 @@ export default function Register() {
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-warm-500">
               Already have an account?{' '}
               <Link
                 to="/login"
-                className="text-violet-400 hover:text-violet-300 font-medium transition-colors"
+                className="text-warm-700 hover:text-warm-900 font-medium transition-colors"
               >
                 Sign in
               </Link>

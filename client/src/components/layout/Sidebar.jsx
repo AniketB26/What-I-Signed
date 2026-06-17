@@ -8,7 +8,6 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
-  Shield,
 } from 'lucide-react';
 import useAuthStore from '../../store/authStore';
 import { authService } from '../../services/auth';
@@ -41,24 +40,25 @@ export default function Sidebar({ collapsed, onToggle }) {
     <aside
       className={`
         fixed left-0 top-0 h-screen z-40
-        glass-strong
+        bg-white/95 backdrop-blur-md
         flex flex-col
         transition-all duration-300 ease-out
         ${collapsed ? 'w-[72px]' : 'w-64'}
-        border-r border-slate-700/50
+        border-r border-cream-300/60
+        shadow-sm
       `}
     >
       {/* Logo */}
-      <div className="flex items-center gap-3 px-4 py-6 border-b border-slate-700/30">
-        <div className="flex-shrink-0 h-10 w-10 rounded-xl bg-gradient-to-br from-violet-600 to-blue-500 flex items-center justify-center shadow-lg shadow-violet-500/25">
-          <Shield size={20} className="text-white" />
+      <div className="flex items-center gap-3 px-4 py-6 border-b border-cream-300/40">
+        <div className="flex-shrink-0 h-10 w-10 rounded-xl bg-emerald-700 flex items-center justify-center shadow-md">
+          <span className="text-white font-bold text-lg">W</span>
         </div>
         {!collapsed && (
           <div className="animate-fadeIn">
-            <h1 className="text-sm font-bold gradient-text whitespace-nowrap">
+            <h1 className="text-sm font-bold text-warm-900 whitespace-nowrap">
               What Did I Sign?
             </h1>
-            <p className="text-[10px] text-slate-500 whitespace-nowrap">Agreement Vault</p>
+            <p className="text-[10px] text-warm-500 whitespace-nowrap">Agreement Vault</p>
           </div>
         )}
       </div>
@@ -74,8 +74,8 @@ export default function Sidebar({ collapsed, onToggle }) {
               text-sm font-medium
               transition-all duration-200 group
               ${isActive
-                ? 'bg-gradient-to-r from-violet-600/20 to-blue-500/20 text-white border border-violet-500/20'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+                ? 'bg-warm-700 text-white shadow-sm'
+                : 'text-warm-600 hover:text-warm-900 hover:bg-cream-200/60'
               }
             `}
           >
@@ -88,30 +88,30 @@ export default function Sidebar({ collapsed, onToggle }) {
       {/* Collapse Toggle */}
       <button
         onClick={onToggle}
-        className="hidden md:flex items-center justify-center mx-3 mb-2 py-2 rounded-xl text-slate-500 hover:text-white hover:bg-slate-800/50 transition-all"
+        className="hidden md:flex items-center justify-center mx-3 mb-2 py-2 rounded-xl text-warm-400 hover:text-warm-700 hover:bg-cream-200/60 transition-all"
       >
         {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
       </button>
 
       {/* User Section */}
-      <div className="px-3 py-4 border-t border-slate-700/30">
+      <div className="px-3 py-4 border-t border-cream-300/40">
         <div className="flex items-center gap-3">
-          <div className="flex-shrink-0 h-9 w-9 rounded-full bg-gradient-to-br from-violet-600 to-cyan-500 flex items-center justify-center text-white font-semibold text-sm">
+          <div className="flex-shrink-0 h-9 w-9 rounded-full bg-warm-600 flex items-center justify-center text-white font-semibold text-sm shadow-sm">
             {user?.name?.[0]?.toUpperCase() || 'U'}
           </div>
           {!collapsed && (
             <div className="flex-1 min-w-0 animate-fadeIn">
-              <p className="text-sm font-medium text-slate-200 truncate">
+              <p className="text-sm font-medium text-warm-900 truncate">
                 {user?.name || 'User'}
               </p>
-              <p className="text-xs text-slate-500 truncate">
+              <p className="text-xs text-warm-500 truncate">
                 {user?.email || ''}
               </p>
             </div>
           )}
           <button
             onClick={handleLogout}
-            className="flex-shrink-0 p-2 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition-all"
+            className="flex-shrink-0 p-2 rounded-lg text-warm-400 hover:text-red-600 hover:bg-red-50 transition-all"
             title="Logout"
           >
             <LogOut size={16} />

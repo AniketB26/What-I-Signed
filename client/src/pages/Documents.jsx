@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FileText, Upload, ChevronDown, ChevronUp } from 'lucide-react';
+import { Upload, ChevronUp } from 'lucide-react';
 import { useDocuments } from '../hooks/useDocuments';
 import UploadZone from '../components/documents/UploadZone';
 import DocumentList from '../components/documents/DocumentList';
@@ -16,11 +16,10 @@ export default function Documents() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-100 flex items-center gap-3">
-            <FileText className="text-violet-400" size={24} />
+          <h1 className="text-2xl font-bold text-warm-900">
             Documents
           </h1>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm text-warm-500 mt-1">
             Manage and analyze your agreements
           </p>
         </div>

@@ -43,24 +43,24 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
       }}
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" />
+      <div className="absolute inset-0 bg-warm-900/40 backdrop-blur-sm" />
 
       {/* Modal */}
       <div
         className={`
           relative w-full ${sizes[size]}
-          glass-strong rounded-2xl
+          bg-white rounded-2xl shadow-xl border border-cream-300/60
           animate-scaleIn
           overflow-hidden
         `}
       >
         {/* Header */}
         {title && (
-          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-700/50">
-            <h2 className="text-lg font-semibold text-slate-100">{title}</h2>
+          <div className="flex items-center justify-between px-6 py-4 border-b border-cream-300/50">
+            <h2 className="text-lg font-semibold text-warm-900">{title}</h2>
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700/50 transition-all"
+              className="p-1.5 rounded-lg text-warm-400 hover:text-warm-900 hover:bg-cream-200/60 transition-all"
             >
               <X size={18} />
             </button>

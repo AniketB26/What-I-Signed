@@ -12,9 +12,9 @@ export default function Card({
     <div
       onClick={onClick}
       className={`
-        glass rounded-2xl overflow-hidden
+        bg-white/80 backdrop-blur-sm border border-cream-300/60 rounded-2xl shadow-sm overflow-hidden
         ${hover
-          ? 'hover:border-violet-500/30 hover:shadow-lg hover:shadow-violet-500/5 hover:-translate-y-0.5 transition-all duration-300 ease-out'
+          ? 'hover:border-warm-400/40 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 ease-out'
           : 'transition-colors duration-300'
         }
         ${onClick ? 'cursor-pointer' : ''}
@@ -23,7 +23,7 @@ export default function Card({
       {...props}
     >
       {header && (
-        <div className="px-5 py-4 border-b border-slate-700/50">
+        <div className="px-5 py-4 border-b border-cream-300/50">
           {header}
         </div>
       )}
@@ -33,7 +33,7 @@ export default function Card({
         children
       )}
       {footer && (
-        <div className="px-5 py-3 border-t border-slate-700/50 bg-slate-900/30">
+        <div className="px-5 py-3 border-t border-cream-300/50 bg-cream-100/30">
           {footer}
         </div>
       )}

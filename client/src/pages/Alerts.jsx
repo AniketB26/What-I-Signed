@@ -36,24 +36,24 @@ export default function Alerts() {
   return (
     <div className="space-y-8 animate-fadeIn">
       <div>
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent">
+        <h1 className="text-2xl font-bold text-warm-900">
           Alerts & Reminders
         </h1>
-        <p className="text-slate-400 mt-2">
+        <p className="text-sm text-warm-500 mt-2">
           Stay on top of important dates and flagged clauses
         </p>
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex gap-2 p-1 bg-slate-800/30 rounded-xl w-fit backdrop-blur-sm border border-slate-700/30">
+      <div className="flex gap-2 p-1 bg-white/60 rounded-xl w-fit border border-cream-300/60">
         {TABS.map(tab => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
               activeTab === tab.key
-                ? 'bg-gradient-to-r from-violet-600 to-blue-600 text-white shadow-lg shadow-violet-500/20'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700/30'
+                ? 'bg-warm-700 text-white shadow-sm'
+                : 'text-warm-500 hover:text-warm-800 hover:bg-cream-200/60'
             }`}
           >
             {tab.label}

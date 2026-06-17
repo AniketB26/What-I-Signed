@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Send, Sparkles, X } from 'lucide-react';
+import { Send, Search, X } from 'lucide-react';
 import Button from '../ui/Button';
 
 const suggestions = [
@@ -16,7 +16,7 @@ export default function QueryInput({
   onFiltersChange,
   documents = [],
   showFilters = true,
-  placeholder = 'Ask anything about your documents...',
+  placeholder = 'Ask a question about your documents...',
   large = false,
 }) {
   const [question, setQuestion] = useState('');
@@ -39,24 +39,23 @@ export default function QueryInput({
         <div className={`
           relative group rounded-2xl
           transition-all duration-300
-          ${large ? 'gradient-border gradient-border-animated' : ''}
         `}>
           <div className={`
-            flex items-center gap-3 bg-slate-900/60 backdrop-blur-xl
-            border border-slate-700/50 rounded-2xl
+            flex items-center gap-3 bg-white/90
+            border border-cream-300 rounded-2xl
             transition-all duration-300
-            focus-within:border-violet-500/50 focus-within:shadow-lg focus-within:shadow-violet-500/10
-            group-hover:border-slate-600
+            focus-within:border-warm-500 focus-within:shadow-md
+            group-hover:border-warm-400
             ${large ? 'p-2 pl-5' : 'p-1.5 pl-4'}
           `}>
-            <Sparkles size={18} className="text-slate-500 flex-shrink-0 group-focus-within:text-violet-400 transition-colors" />
+            <Search size={18} className="text-warm-400 flex-shrink-0 group-focus-within:text-warm-600 transition-colors" />
             <input
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
               placeholder={placeholder}
               disabled={isStreaming}
               className={`
-                flex-1 bg-transparent text-slate-100 placeholder:text-slate-500
+                flex-1 bg-transparent text-warm-900 placeholder:text-warm-400
                 focus:outline-none disabled:opacity-50
                 ${large ? 'py-3 text-base' : 'py-2 text-sm'}
               `}
@@ -65,7 +64,7 @@ export default function QueryInput({
               <button
                 type="button"
                 onClick={() => setQuestion('')}
-                className="p-1.5 text-slate-500 hover:text-white transition-colors"
+                className="p-1.5 text-warm-400 hover:text-warm-700 transition-colors"
               >
                 <X size={16} />
               </button>
@@ -90,11 +89,11 @@ export default function QueryInput({
             <select
               value={filters.documentId || ''}
               onChange={(e) => onFiltersChange({ ...filters, documentId: e.target.value || undefined })}
-              className="bg-slate-900/50 backdrop-blur-sm border border-slate-700/50 rounded-xl px-3 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-violet-500/50 appearance-none cursor-pointer hover:border-slate-600 transition-all"
+              className="bg-white/80 border border-cream-300 rounded-xl px-3 py-1.5 text-xs text-warm-700 focus:outline-none focus:border-warm-500 appearance-none cursor-pointer hover:border-warm-400 transition-all"
             >
-              <option value="" className="bg-slate-900">All documents</option>
+              <option value="">All documents</option>
               {documents.map((doc) => (
-                <option key={doc._id} value={doc._id} className="bg-slate-900">
+                <option key={doc._id} value={doc._id}>
                   {doc.originalName || doc.name}
                 </option>
               ))}
@@ -110,7 +109,7 @@ export default function QueryInput({
             <button
               key={suggestion}
               onClick={() => handleSuggestionClick(suggestion)}
-              className="px-3 py-1.5 text-xs text-slate-400 glass rounded-xl hover:text-violet-300 hover:border-violet-500/30 transition-all"
+              className="px-3 py-1.5 text-xs text-warm-600 bg-white/80 border border-cream-300 rounded-xl hover:text-warm-800 hover:border-warm-400 hover:bg-cream-100 transition-all"
             >
               {suggestion}
             </button>

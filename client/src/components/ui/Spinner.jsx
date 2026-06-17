@@ -13,8 +13,8 @@ export default function Spinner({ size = 'md', className = '' }) {
           ${sizes[size]}
           rounded-full animate-spin
           border-transparent
-          border-t-violet-500 border-r-blue-500
-          border-b-cyan-400 border-l-transparent
+          border-t-warm-600 border-r-warm-400
+          border-b-warm-300 border-l-transparent
         `}
       />
     </div>

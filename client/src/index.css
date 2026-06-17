@@ -6,7 +6,7 @@
 
 @layer base {
   body {
-    @apply bg-slate-950 text-slate-50 font-sans antialiased;
+    @apply bg-parchment text-warm-900 font-sans antialiased;
   }
 
   * {
@@ -14,74 +14,58 @@
   }
 
   ::selection {
-    @apply bg-violet-600/40 text-white;
+    @apply bg-warm-500/30 text-warm-900;
   }
 }
 
 @layer components {
+  /* Warm card styles — replaces dark glass */
+  .card-warm {
+    @apply bg-white/80 backdrop-blur-sm border border-cream-300/60 shadow-sm rounded-2xl;
+  }
+
+  .card-warm-light {
+    @apply bg-white/50 backdrop-blur-sm border border-cream-300/40 rounded-xl;
+  }
+
+  .card-warm-strong {
+    @apply bg-white/90 backdrop-blur-md border border-cream-300/70 shadow-md rounded-2xl;
+  }
+
+  /* Keep glass aliases for backward compat during migration */
   .glass {
-    @apply bg-slate-900/50 backdrop-blur-xl border border-slate-700/50 shadow-xl;
+    @apply card-warm;
   }
 
   .glass-light {
-    @apply bg-slate-800/30 backdrop-blur-lg border border-slate-700/30;
+    @apply card-warm-light;
   }
 
   .glass-strong {
-    @apply bg-slate-900/80 backdrop-blur-2xl border border-slate-700/60 shadow-2xl;
+    @apply bg-white/95 backdrop-blur-md border border-cream-300/60 shadow-lg;
   }
 
   .gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-violet-400 via-blue-400 to-cyan-400;
+    @apply text-warm-900 font-bold;
   }
 
   .gradient-text-warm {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-rose-400;
+    @apply text-warm-700 font-bold;
   }
 
-  .gradient-border {
-    position: relative;
-    border: none;
+  .btn-warm {
+    @apply bg-warm-700 text-white hover:bg-warm-800 shadow-sm;
   }
 
-  .gradient-border::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(135deg, #8b5cf6, #3b82f6, #06b6d4);
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
-  }
-
-  .gradient-border-animated::before {
-    background: linear-gradient(135deg, #8b5cf6, #3b82f6, #06b6d4, #8b5cf6);
-    background-size: 300% 300%;
-    animation: gradient-rotate 3s ease infinite;
-  }
-
-  .btn-glow {
-    @apply relative overflow-hidden;
-  }
-
-  .btn-glow::after {
-    content: '';
-    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
-    background: radial-gradient(circle at center, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
-  }
-
-  .btn-glow:hover::after {
-    @apply opacity-100;
+  .btn-warm-outline {
+    @apply bg-transparent border border-warm-400 text-warm-700 hover:bg-warm-100;
   }
 }
 
 @layer utilities {
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: #334155 transparent;
+    scrollbar-color: #c4a97a transparent;
   }
 
   .scrollbar-thin::-webkit-scrollbar {
@@ -94,12 +78,12 @@
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: #334155;
+    background-color: #c4a97a;
     border-radius: 3px;
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background-color: #475569;
+    background-color: #a0784c;
   }
 
   .no-scrollbar {
@@ -110,10 +94,4 @@
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
-}
-
-@keyframes gradient-rotate {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
 }

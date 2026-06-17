@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FileText, Bell, CheckCircle2, ArrowRight, Sparkles } from 'lucide-react';
+import { FileText, Bell, CheckCircle2, ArrowRight, Search } from 'lucide-react';
 import useAuthStore from '../store/authStore';
 import { useDocuments } from '../hooks/useDocuments';
 import { useAlerts } from '../hooks/useAlerts';
@@ -59,22 +59,22 @@ export default function Dashboard() {
       label: 'Total Documents',
       value: totalDocs,
       icon: FileText,
-      gradient: 'from-violet-600/20 to-violet-600/5',
-      iconColor: 'text-violet-400',
+      bg: 'bg-warm-100',
+      iconColor: 'text-warm-600',
     },
     {
       label: 'Active Alerts',
       value: activeAlerts,
       icon: Bell,
-      gradient: 'from-amber-600/20 to-amber-600/5',
-      iconColor: 'text-amber-400',
+      bg: 'bg-amber-50',
+      iconColor: 'text-amber-600',
     },
     {
       label: 'Processed',
       value: processedDocs,
       icon: CheckCircle2,
-      gradient: 'from-emerald-600/20 to-emerald-600/5',
-      iconColor: 'text-emerald-400',
+      bg: 'bg-emerald-50',
+      iconColor: 'text-emerald-600',
     },
   ];
 
@@ -82,11 +82,11 @@ export default function Dashboard() {
     <div className="space-y-8 animate-fadeIn">
       {/* Welcome */}
       <div>
-        <h1 className="text-2xl font-bold text-slate-100">
-          Welcome back, <span className="gradient-text">{user?.name || 'there'}</span>
+        <h1 className="text-2xl font-bold text-warm-900">
+          Welcome back, {user?.name || 'there'}.
         </h1>
-        <p className="text-sm text-slate-500 mt-1">
-          Here's what's happening with your agreements
+        <p className="text-sm text-warm-500 mt-1">
+          Here's what's happening with your agreements.
         </p>
       </div>
 
@@ -95,23 +95,21 @@ export default function Dashboard() {
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className={`
-              glass rounded-2xl p-5
-              bg-gradient-to-br ${stat.gradient}
-              hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5
-            `}
+            className="bg-white/80 border border-cream-300/60 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
           >
             <div className="flex items-center justify-between mb-3">
-              <stat.icon size={20} className={stat.iconColor} />
+              <div className={`p-2 rounded-xl ${stat.bg}`}>
+                <stat.icon size={20} className={stat.iconColor} />
+              </div>
             </div>
-            <div className="text-2xl font-bold text-white">
+            <div className="text-2xl font-bold text-warm-900">
               {docsLoading || alertsLoading ? (
                 <Skeleton variant="text" className="w-12 h-7" />
               ) : (
                 <AnimatedCounter target={stat.value} />
               )}
             </div>
-            <p className="text-xs text-slate-400 mt-1">{stat.label}</p>
+            <p className="text-xs text-warm-500 mt-1">{stat.label}</p>
           </div>
         ))}
       </div>
@@ -119,8 +117,8 @@ export default function Dashboard() {
       {/* Quick Query */}
       <div className="space-y-4">
         <div className="flex items-center gap-2">
-          <Sparkles size={18} className="text-violet-400" />
-          <h2 className="text-lg font-semibold text-slate-200">Quick Query</h2>
+          <Search size={18} className="text-warm-600" />
+          <h2 className="text-lg font-semibold text-warm-800">Quick Query</h2>
         </div>
         <QueryInput
           onSubmit={(q) => sendQuery(q)}
@@ -143,10 +141,10 @@ export default function Dashboard() {
       {topAlerts.length > 0 && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-slate-200">Recent Alerts</h2>
+            <h2 className="text-lg font-semibold text-warm-800">Recent Alerts</h2>
             <button
               onClick={() => navigate('/alerts')}
-              className="flex items-center gap-1 text-xs text-violet-400 hover:text-violet-300 transition-colors group"
+              className="flex items-center gap-1 text-xs text-warm-600 hover:text-warm-800 transition-colors group"
             >
               View all <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
             </button>
@@ -162,10 +160,10 @@ export default function Dashboard() {
       {/* Recent Documents */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-slate-200">Recent Documents</h2>
+          <h2 className="text-lg font-semibold text-warm-800">Recent Documents</h2>
           <button
             onClick={() => navigate('/documents')}
-            className="flex items-center gap-1 text-xs text-violet-400 hover:text-violet-300 transition-colors group"
+            className="flex items-center gap-1 text-xs text-warm-600 hover:text-warm-800 transition-colors group"
           >
             View all <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
           </button>
@@ -186,7 +184,7 @@ export default function Dashboard() {
           <EmptyState
             icon={FileText}
             title="No documents yet"
-            description="Upload your first document to get started"
+            description="Upload your first document to get started."
             actionLabel="Upload Document"
             onAction={() => navigate('/documents')}
           />

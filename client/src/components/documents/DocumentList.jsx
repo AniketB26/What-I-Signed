@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { Filter, FileText } from 'lucide-react';
+import { Filter, FileText, ChevronDown } from 'lucide-react';
 import DocumentCard from './DocumentCard';
 import { SkeletonCard } from '../ui/Skeleton';
 import EmptyState from '../ui/EmptyState';
 
 const docTypes = [
-  { value: '', label: 'All Types' },
+  { value: '', label: 'Document Type' },
   { value: 'lease', label: 'Lease' },
   { value: 'employment', label: 'Employment' },
   { value: 'nda', label: 'NDA' },
@@ -16,7 +16,7 @@ const docTypes = [
 ];
 
 const statusOptions = [
-  { value: '', label: 'All Status' },
+  { value: '', label: 'Status' },
   { value: 'ready', label: 'Ready' },
   { value: 'processing', label: 'Processing' },
   { value: 'failed', label: 'Failed' },
@@ -36,18 +36,15 @@ export default function DocumentList({ documents, isLoading }) {
     <div className="space-y-5">
       {/* Filter bar */}
       <div className="flex flex-wrap items-center gap-3">
-        <div className="flex items-center gap-2 text-slate-400">
-          <Filter size={16} />
-          <span className="text-xs font-medium">Filters</span>
-        </div>
+        <span className="text-sm font-medium text-warm-600">Filter By:</span>
 
         <select
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
-          className="bg-slate-900/50 backdrop-blur-sm border border-slate-700/50 rounded-xl px-3 py-2 text-xs text-slate-300 focus:outline-none focus:border-violet-500/50 appearance-none cursor-pointer hover:border-slate-600 transition-all"
+          className="bg-white/80 border border-cream-300 rounded-xl px-3 py-2 text-xs text-warm-700 focus:outline-none focus:border-warm-500 appearance-none cursor-pointer hover:border-warm-400 transition-all"
         >
           {docTypes.map((opt) => (
-            <option key={opt.value} value={opt.value} className="bg-slate-900">
+            <option key={opt.value} value={opt.value}>
               {opt.label}
             </option>
           ))}
@@ -56,10 +53,10 @@ export default function DocumentList({ documents, isLoading }) {
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="bg-slate-900/50 backdrop-blur-sm border border-slate-700/50 rounded-xl px-3 py-2 text-xs text-slate-300 focus:outline-none focus:border-violet-500/50 appearance-none cursor-pointer hover:border-slate-600 transition-all"
+          className="bg-white/80 border border-cream-300 rounded-xl px-3 py-2 text-xs text-warm-700 focus:outline-none focus:border-warm-500 appearance-none cursor-pointer hover:border-warm-400 transition-all"
         >
           {statusOptions.map((opt) => (
-            <option key={opt.value} value={opt.value} className="bg-slate-900">
+            <option key={opt.value} value={opt.value}>
               {opt.label}
             </option>
           ))}
@@ -68,7 +65,7 @@ export default function DocumentList({ documents, isLoading }) {
         {(typeFilter || statusFilter) && (
           <button
             onClick={() => { setTypeFilter(''); setStatusFilter(''); }}
-            className="text-xs text-violet-400 hover:text-violet-300 transition-colors"
+            className="text-xs text-warm-600 hover:text-warm-800 transition-colors"
           >
             Clear filters
           </button>
@@ -88,12 +85,13 @@ export default function DocumentList({ documents, isLoading }) {
       {!isLoading && filtered.length === 0 && (
         <EmptyState
           icon={FileText}
-          title="No documents found"
+          title="No documents yet"
           description={
             typeFilter || statusFilter
               ? 'Try adjusting your filters to find what you\'re looking for.'
               : 'Upload your first document to get started with AI analysis.'
           }
+          actionLabel={!typeFilter && !statusFilter ? 'Upload Your First Document' : undefined}
         />
       )}
 

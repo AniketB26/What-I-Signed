@@ -1,5 +1,5 @@
 export default function Skeleton({ className = '', variant = 'text' }) {
-  const base = 'bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 bg-[length:200%_100%] animate-shimmer rounded-lg';
+  const base = 'bg-gradient-to-r from-cream-200 via-cream-100 to-cream-200 bg-[length:200%_100%] animate-shimmer rounded-lg';
 
   const variants = {
     text: `h-4 w-full ${base}`,
@@ -15,7 +15,7 @@ export default function Skeleton({ className = '', variant = 'text' }) {
 
 export function SkeletonCard() {
   return (
-    <div className="glass rounded-2xl p-5 space-y-4">
+    <div className="bg-white/80 border border-cream-300/60 rounded-2xl p-5 space-y-4 shadow-sm">
       <div className="flex items-center justify-between">
         <Skeleton variant="title" className="w-2/3" />
         <Skeleton variant="badge" />
@@ -36,7 +36,7 @@ export function SkeletonList({ count = 3 }) {
   return (
     <div className="space-y-4">
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="glass rounded-2xl p-5 flex items-center gap-4">
+        <div key={i} className="bg-white/80 border border-cream-300/60 rounded-2xl p-5 flex items-center gap-4 shadow-sm">
           <Skeleton variant="avatar" />
           <div className="flex-1 space-y-2">
             <Skeleton variant="text" className="w-1/3" />

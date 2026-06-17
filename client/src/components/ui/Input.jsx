@@ -14,37 +14,37 @@ const Input = forwardRef(function Input(
   return (
     <div className={`space-y-1.5 ${containerClassName}`}>
       {label && (
-        <label className="block text-sm font-medium text-slate-300 pl-1">
+        <label className="block text-sm font-medium text-warm-700 pl-1">
           {label}
         </label>
       )}
       <div className="relative group">
         {Icon && (
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-violet-400 transition-colors">
+          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-warm-400 group-focus-within:text-warm-600 transition-colors">
             <Icon size={18} />
           </div>
         )}
         <input
           ref={ref}
           className={`
-            w-full bg-slate-900/50 backdrop-blur-sm
-            border border-slate-700/50 rounded-xl
-            text-slate-100 placeholder:text-slate-500
+            w-full bg-white/80
+            border border-cream-300 rounded-xl
+            text-warm-900 placeholder:text-warm-400
             transition-all duration-300
-            focus:outline-none focus:border-violet-500/70 focus:ring-2 focus:ring-violet-500/20
-            focus:bg-slate-900/70
-            hover:border-slate-600
+            focus:outline-none focus:border-warm-500 focus:ring-2 focus:ring-warm-500/20
+            focus:bg-white
+            hover:border-warm-400
             disabled:opacity-50 disabled:cursor-not-allowed
             ${Icon ? 'pl-10 pr-4' : 'px-4'}
             py-3 text-sm
-            ${error ? 'border-rose-500/50 focus:border-rose-500 focus:ring-rose-500/20' : ''}
+            ${error ? 'border-red-400 focus:border-red-500 focus:ring-red-500/20' : ''}
             ${className}
           `}
           {...props}
         />
       </div>
       {error && (
-        <p className="text-xs text-rose-400 pl-1 animate-slideDown">
+        <p className="text-xs text-red-500 pl-1 animate-slideDown">
           {error}
         </p>
       )}

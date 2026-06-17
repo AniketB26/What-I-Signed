@@ -94,10 +94,10 @@ export const login = asyncHandler(async (req, res) => {
   // Find user with password hash
   const user = await User.findOne({ email });
   if (!user) {
-    return res.status(401).json({
+    return res.status(404).json({
       success: false,
       data: null,
-      message: 'Invalid email or password',
+      message: 'User not found',
     });
   }
 
@@ -107,7 +107,7 @@ export const login = asyncHandler(async (req, res) => {
     return res.status(401).json({
       success: false,
       data: null,
-      message: 'Invalid email or password',
+      message: 'Incorrect password',
     });
   }
 
