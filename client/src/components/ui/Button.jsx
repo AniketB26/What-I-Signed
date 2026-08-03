@@ -1,21 +1,20 @@
 import { Loader2 } from 'lucide-react';
 
 const variants = {
-  primary:
-    'bg-warm-700 text-white hover:bg-warm-800 shadow-sm hover:shadow-md',
-  secondary:
-    'bg-white/80 border border-cream-300 text-warm-700 hover:bg-cream-100 hover:text-warm-900',
+  primary: 'btn-primary-glass',
+  gold: 'btn-gold-glass',
+  secondary: 'glass-chip text-warm-800 hover:text-warm-900',
   danger:
-    'bg-red-600 text-white hover:bg-red-700 shadow-sm',
+    'bg-gradient-to-b from-red-500 to-red-600 text-white border border-white/20 shadow-glass-sm hover:from-red-600 hover:to-red-700',
   ghost:
-    'bg-transparent text-warm-500 hover:text-warm-900 hover:bg-cream-200/60',
+    'bg-transparent text-mocha-600 hover:text-warm-900 hover:bg-white/45 border border-transparent',
   outline:
-    'border border-warm-400 text-warm-600 hover:border-warm-600 hover:text-warm-700 hover:bg-warm-50',
+    'bg-transparent border border-gold-400/70 text-gold-700 hover:bg-white/45 hover:border-gold-500',
 };
 
 const sizes = {
-  sm: 'px-3 py-1.5 text-xs rounded-lg gap-1.5',
-  md: 'px-4 py-2.5 text-sm rounded-xl gap-2',
+  sm: 'px-3.5 py-1.5 text-xs rounded-lg gap-1.5',
+  md: 'px-5 py-2.5 text-sm rounded-xl gap-2',
   lg: 'px-6 py-3 text-base rounded-xl gap-2.5',
 };
 
@@ -33,11 +32,11 @@ export default function Button({
     <button
       disabled={disabled || loading}
       className={`
-        inline-flex items-center justify-center font-medium
+        relative inline-flex items-center justify-center font-medium overflow-hidden
         transition-all duration-300 ease-out
-        disabled:opacity-50 disabled:cursor-not-allowed
+        disabled:opacity-60 disabled:cursor-not-allowed
         active:scale-[0.97]
-        ${variants[variant]}
+        ${variants[variant] || variants.primary}
         ${sizes[size]}
         ${className}
       `}

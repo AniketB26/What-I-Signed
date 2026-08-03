@@ -1,12 +1,15 @@
+/* Badges sit on glass, so every swatch is translucent with a bright inner
+   top edge — a solid fill would read as a sticker pasted on the pane. */
 const colorMap = {
-  default: 'bg-cream-200/60 text-warm-600 border-cream-300',
-  purple: 'bg-purple-50 text-purple-700 border-purple-200',
-  blue: 'bg-blue-50 text-blue-700 border-blue-200',
-  cyan: 'bg-cyan-50 text-cyan-700 border-cyan-200',
-  green: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-  amber: 'bg-amber-50 text-amber-700 border-amber-200',
-  red: 'bg-red-50 text-red-700 border-red-200',
-  emerald: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+  default: 'bg-white/50 text-mocha-700 border-white/60',
+  purple: 'bg-purple-100/60 text-purple-800 border-purple-200/70',
+  blue: 'bg-blue-100/60 text-blue-800 border-blue-200/70',
+  cyan: 'bg-cyan-100/60 text-cyan-800 border-cyan-200/70',
+  green: 'bg-emerald-100/60 text-emerald-800 border-emerald-200/70',
+  amber: 'bg-gold-100/70 text-gold-800 border-gold-200/70',
+  red: 'bg-red-100/60 text-red-800 border-red-200/70',
+  emerald: 'bg-emerald-100/60 text-emerald-800 border-emerald-200/70',
+  gold: 'bg-gold-100/70 text-gold-800 border-gold-300/60',
 };
 
 const docTypeColors = {
@@ -40,15 +43,15 @@ export default function Badge({
     ? statusColors[status] || 'default'
     : color;
 
-  const sizeClasses = size === 'xs'
-    ? 'px-1.5 py-0.5 text-[10px]'
-    : 'px-2.5 py-1 text-xs';
+  const sizeClasses =
+    size === 'xs' ? 'px-2 py-0.5 text-[10px]' : 'px-2.5 py-1 text-xs';
 
   return (
     <span
       className={`
         inline-flex items-center font-medium
-        rounded-full border
+        rounded-full border backdrop-blur-sm
+        shadow-[inset_0_1px_0_0_rgba(255,255,255,0.6)]
         ${colorMap[resolvedColor] || colorMap.default}
         ${sizeClasses}
         ${className}

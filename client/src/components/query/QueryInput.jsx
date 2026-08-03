@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Send, Search, X } from 'lucide-react';
+import { Sparkles, Search, X } from 'lucide-react';
 import Button from '../ui/Button';
 
 const suggestions = [
@@ -34,82 +34,81 @@ export default function QueryInput({
 
   return (
     <div className="space-y-4">
-      {/* Search input */}
+      {/* Search pill */}
       <form onSubmit={handleSubmit}>
-        <div className={`
-          relative group rounded-2xl
-          transition-all duration-300
-        `}>
-          <div className={`
-            flex items-center gap-3 bg-white/90
-            border border-cream-300 rounded-2xl
-            transition-all duration-300
-            focus-within:border-warm-500 focus-within:shadow-md
-            group-hover:border-warm-400
-            ${large ? 'p-2 pl-5' : 'p-1.5 pl-4'}
-          `}>
-            <Search size={18} className="text-warm-400 flex-shrink-0 group-focus-within:text-warm-600 transition-colors" />
-            <input
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-              placeholder={placeholder}
-              disabled={isStreaming}
-              className={`
-                flex-1 bg-transparent text-warm-900 placeholder:text-warm-400
-                focus:outline-none disabled:opacity-50
-                ${large ? 'py-3 text-base' : 'py-2 text-sm'}
-              `}
-            />
-            {question && !isStreaming && (
-              <button
-                type="button"
-                onClick={() => setQuestion('')}
-                className="p-1.5 text-warm-400 hover:text-warm-700 transition-colors"
-              >
-                <X size={16} />
-              </button>
-            )}
-            <Button
-              type="submit"
-              size={large ? 'md' : 'sm'}
-              disabled={!question.trim() || isStreaming}
-              loading={isStreaming}
-              icon={Send}
+        <div
+          className={`
+            glass-input group flex items-center gap-3 rounded-full
+            ${large ? 'p-2 pl-6' : 'p-1.5 pl-5'}
+          `}
+        >
+          <Search
+            size={18}
+            className="text-mocha-500 flex-shrink-0 group-focus-within:text-gold-600 transition-colors"
+          />
+          <input
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            placeholder={placeholder}
+            disabled={isStreaming}
+            className={`
+              flex-1 min-w-0 bg-transparent text-warm-900 placeholder:text-mocha-500/85
+              focus:outline-none disabled:opacity-50
+              ${large ? 'py-3 text-base' : 'py-2 text-sm'}
+            `}
+          />
+          {question && !isStreaming && (
+            <button
+              type="button"
+              onClick={() => setQuestion('')}
+              className="p-1.5 rounded-full text-mocha-500 hover:text-warm-900 hover:bg-white/60 transition-all"
+              aria-label="Clear question"
             >
-              {large ? 'Ask AI' : 'Ask'}
-            </Button>
-          </div>
+              <X size={16} />
+            </button>
+          )}
+          <Button
+            type="submit"
+            variant="gold"
+            size={large ? 'md' : 'sm'}
+            disabled={!question.trim() || isStreaming}
+            loading={isStreaming}
+            icon={Sparkles}
+            className="!rounded-full flex-shrink-0"
+          >
+            {large ? 'Ask AI' : 'Ask'}
+          </Button>
         </div>
       </form>
 
-      {/* Filter chips */}
-      {showFilters && onFiltersChange && (
+      {/* Document scope filter */}
+      {showFilters && onFiltersChange && documents.length > 0 && (
         <div className="flex flex-wrap gap-2">
-          {documents.length > 0 && (
-            <select
-              value={filters.documentId || ''}
-              onChange={(e) => onFiltersChange({ ...filters, documentId: e.target.value || undefined })}
-              className="bg-white/80 border border-cream-300 rounded-xl px-3 py-1.5 text-xs text-warm-700 focus:outline-none focus:border-warm-500 appearance-none cursor-pointer hover:border-warm-400 transition-all"
-            >
-              <option value="">All documents</option>
-              {documents.map((doc) => (
-                <option key={doc._id} value={doc._id}>
-                  {doc.originalName || doc.name}
-                </option>
-              ))}
-            </select>
-          )}
+          <select
+            value={filters.documentId || ''}
+            onChange={(e) =>
+              onFiltersChange({ ...filters, documentId: e.target.value || undefined })
+            }
+            className="glass-chip rounded-full px-4 py-2 text-xs text-warm-800 focus:outline-none appearance-none cursor-pointer"
+          >
+            <option value="">All documents</option>
+            {documents.map((doc) => (
+              <option key={doc._id} value={doc._id}>
+                {doc.originalName || doc.name}
+              </option>
+            ))}
+          </select>
         </div>
       )}
 
-      {/* Suggestions */}
+      {/* Suggestion chips */}
       {!question && !isStreaming && large && (
-        <div className="flex flex-wrap gap-2 animate-fadeIn">
+        <div className="flex flex-wrap gap-2.5 animate-fadeIn">
           {suggestions.map((suggestion) => (
             <button
               key={suggestion}
               onClick={() => handleSuggestionClick(suggestion)}
-              className="px-3 py-1.5 text-xs text-warm-600 bg-white/80 border border-cream-300 rounded-xl hover:text-warm-800 hover:border-warm-400 hover:bg-cream-100 transition-all"
+              className="glass-chip rounded-full px-4 py-2 text-xs text-mocha-700 hover:text-warm-900"
             >
               {suggestion}
             </button>

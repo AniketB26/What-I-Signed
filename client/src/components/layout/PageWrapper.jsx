@@ -2,18 +2,15 @@ import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
+import VaultBackdrop from './VaultBackdrop';
 
 export default function PageWrapper() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-parchment">
-      {/* Ambient warm background */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-amber-200/20 via-orange-100/10 to-transparent rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-amber-100/15 via-cream-300/10 to-transparent rounded-full blur-3xl" />
-      </div>
+    <div className="min-h-screen">
+      <VaultBackdrop />
 
       {/* Desktop Sidebar */}
       <div className="hidden md:block">
@@ -33,7 +30,7 @@ export default function PageWrapper() {
       {mobileMenuOpen && (
         <div className="md:hidden fixed inset-0 z-30">
           <div
-            className="absolute inset-0 bg-warm-900/30 backdrop-blur-sm"
+            className="absolute inset-0 bg-mocha-900/30 backdrop-blur-sm"
             onClick={() => setMobileMenuOpen(false)}
           />
           <div className="relative z-10">
@@ -51,7 +48,7 @@ export default function PageWrapper() {
           ${sidebarCollapsed ? 'md:ml-[72px]' : 'md:ml-64'}
         `}
       >
-        <div className="p-4 md:p-8 max-w-7xl mx-auto relative z-10">
+        <div className="p-4 md:p-8 lg:p-10 max-w-7xl mx-auto relative z-10">
           <Outlet />
         </div>
       </main>

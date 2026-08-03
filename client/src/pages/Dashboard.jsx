@@ -59,66 +59,68 @@ export default function Dashboard() {
       label: 'Total Documents',
       value: totalDocs,
       icon: FileText,
-      bg: 'bg-warm-100',
-      iconColor: 'text-warm-600',
+      iconColor: 'text-mocha-500',
     },
     {
       label: 'Active Alerts',
       value: activeAlerts,
       icon: Bell,
-      bg: 'bg-amber-50',
-      iconColor: 'text-amber-600',
+      iconColor: 'text-gold-500',
     },
     {
       label: 'Processed',
       value: processedDocs,
       icon: CheckCircle2,
-      bg: 'bg-emerald-50',
-      iconColor: 'text-emerald-600',
+      iconColor: 'text-emerald-600/70',
     },
   ];
 
   return (
-    <div className="space-y-8 animate-fadeIn">
+    <div className="space-y-9 animate-fadeIn">
       {/* Welcome */}
       <div>
-        <h1 className="text-2xl font-bold text-warm-900">
+        <h1 className="heading-display text-3xl md:text-[2.5rem] leading-tight">
           Welcome back, {user?.name || 'there'}.
         </h1>
-        <p className="text-sm text-warm-500 mt-1">
+        <p className="text-sm text-mocha-700 mt-2">
           Here's what's happening with your agreements.
         </p>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
         {stats.map((stat) => (
-          <div
-            key={stat.label}
-            className="bg-white/80 border border-cream-300/60 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
-          >
-            <div className="flex items-center justify-between mb-3">
-              <div className={`p-2 rounded-xl ${stat.bg}`}>
-                <stat.icon size={20} className={stat.iconColor} />
+          <div key={stat.label} className="glass-tile glass-hover p-6">
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0">
+                <div className="font-display text-4xl font-semibold text-warm-900 leading-none">
+                  {docsLoading || alertsLoading ? (
+                    <Skeleton variant="text" className="w-12 h-9" />
+                  ) : (
+                    <AnimatedCounter target={stat.value} />
+                  )}
+                </div>
+                <p className="text-xs tracking-wide text-mocha-700 mt-3">
+                  {stat.label}
+                </p>
               </div>
+              <stat.icon
+                size={22}
+                strokeWidth={1.6}
+                className={`flex-shrink-0 ${stat.iconColor}`}
+              />
             </div>
-            <div className="text-2xl font-bold text-warm-900">
-              {docsLoading || alertsLoading ? (
-                <Skeleton variant="text" className="w-12 h-7" />
-              ) : (
-                <AnimatedCounter target={stat.value} />
-              )}
-            </div>
-            <p className="text-xs text-warm-500 mt-1">{stat.label}</p>
           </div>
         ))}
       </div>
 
       {/* Quick Query */}
       <div className="space-y-4">
-        <div className="flex items-center gap-2">
-          <Search size={18} className="text-warm-600" />
-          <h2 className="text-lg font-semibold text-warm-800">Quick Query</h2>
+        <div className="flex items-center gap-2.5">
+          <Search size={17} className="text-gold-600" />
+          <h2 className="font-display text-xl font-semibold text-warm-900">
+            Quick Query
+          </h2>
         </div>
         <QueryInput
           onSubmit={(q) => sendQuery(q)}
@@ -141,10 +143,12 @@ export default function Dashboard() {
       {topAlerts.length > 0 && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-warm-800">Recent Alerts</h2>
+            <h2 className="font-display text-xl font-semibold text-warm-900">
+              Recent Alerts
+            </h2>
             <button
               onClick={() => navigate('/alerts')}
-              className="flex items-center gap-1 text-xs text-warm-600 hover:text-warm-800 transition-colors group"
+              className="flex items-center gap-1 text-xs text-mocha-700 hover:text-warm-900 transition-colors group"
             >
               View all <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
             </button>
@@ -160,10 +164,12 @@ export default function Dashboard() {
       {/* Recent Documents */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-warm-800">Recent Documents</h2>
+          <h2 className="font-display text-xl font-semibold text-warm-900">
+            Recent Documents
+          </h2>
           <button
             onClick={() => navigate('/documents')}
-            className="flex items-center gap-1 text-xs text-warm-600 hover:text-warm-800 transition-colors group"
+            className="flex items-center gap-1 text-xs text-mocha-700 hover:text-warm-900 transition-colors group"
           >
             View all <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
           </button>

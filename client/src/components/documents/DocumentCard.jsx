@@ -31,29 +31,28 @@ export default function DocumentCard({ document }) {
       <div
         onClick={handleClick}
         className={`
-          bg-white/80 border border-cream-300/60 rounded-2xl shadow-sm overflow-hidden
-          transition-all duration-300 ease-out group
-          ${isProcessing
-            ? 'cursor-default'
-            : 'cursor-pointer hover:border-warm-400/50 hover:shadow-md hover:-translate-y-0.5'
-          }
+          glass-tile overflow-hidden group
+          ${isProcessing ? 'cursor-default transition-colors' : 'cursor-pointer glass-hover'}
         `}
       >
         <div className="p-5">
           {/* Header */}
-          <div className="flex items-start justify-between gap-3 mb-3">
+          <div className="flex items-start justify-between gap-3 mb-3.5">
             <div className="flex items-center gap-3 min-w-0">
-              <div className={`
-                p-2.5 rounded-xl flex-shrink-0 transition-colors
-                ${isProcessing ? 'bg-amber-50' : 'bg-warm-100 group-hover:bg-warm-200/60'}
-              `}>
-                <FileText size={18} className={isProcessing ? 'text-amber-600' : 'text-warm-600'} />
+              <div
+                className={`
+                  glass-soft !rounded-xl p-2.5 flex-shrink-0
+                  ${isProcessing ? 'text-gold-600' : 'text-mocha-600 group-hover:text-gold-600'}
+                  transition-colors
+                `}
+              >
+                <FileText size={18} strokeWidth={1.7} />
               </div>
               <div className="min-w-0">
-                <h3 className="text-sm font-semibold text-warm-900 truncate group-hover:text-warm-800 transition-colors">
+                <h3 className="text-sm font-semibold text-warm-900 truncate">
                   {document.originalName || document.name}
                 </h3>
-                <p className="text-xs text-warm-400 mt-0.5">
+                <p className="text-xs text-mocha-600 mt-0.5">
                   {document.createdAt
                     ? formatDistanceToNow(new Date(document.createdAt), { addSuffix: true })
                     : 'Recently'}
@@ -67,7 +66,8 @@ export default function DocumentCard({ document }) {
                 e.stopPropagation();
                 setShowDeleteModal(true);
               }}
-              className="p-1.5 rounded-lg text-warm-300 hover:text-red-500 hover:bg-red-50 transition-all opacity-0 group-hover:opacity-100"
+              className="p-1.5 rounded-lg text-mocha-400 hover:text-red-500 hover:bg-red-50/70 transition-all opacity-0 group-hover:opacity-100 focus:opacity-100"
+              aria-label="Delete document"
             >
               <Trash2 size={14} />
             </button>
@@ -85,7 +85,7 @@ export default function DocumentCard({ document }) {
           ) : (
             <>
               {document.analysis?.summary && (
-                <p className="text-xs text-warm-500 line-clamp-2 leading-relaxed mb-3">
+                <p className="text-xs text-mocha-700 line-clamp-2 leading-relaxed mb-3">
                   {document.analysis.summary}
                 </p>
               )}
@@ -112,7 +112,7 @@ export default function DocumentCard({ document }) {
         size="sm"
       >
         <div className="space-y-4">
-          <p className="text-sm text-warm-700">
+          <p className="text-sm text-mocha-800">
             Are you sure you want to delete{' '}
             <span className="font-semibold text-warm-900">
               {document.originalName || document.name}

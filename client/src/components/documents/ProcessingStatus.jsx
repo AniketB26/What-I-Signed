@@ -38,14 +38,14 @@ export default function ProcessingStatus({ documentId }) {
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Loader2 size={12} className="text-warm-500 animate-spin" />
-          <span className="text-xs text-warm-700 font-medium">{stage.label}</span>
+          <Loader2 size={12} className="text-gold-600 animate-spin" />
+          <span className="text-xs text-warm-900 font-medium">{stage.label}</span>
         </div>
-        <span className="text-xs text-warm-400">{displayProgress}%</span>
+        <span className="text-xs text-mocha-600">{displayProgress}%</span>
       </div>
-      <div className="h-1 bg-cream-200 rounded-full overflow-hidden">
+      <div className="h-1.5 rounded-full overflow-hidden bg-white/50 shadow-glass-inset">
         <div
-          className="h-full bg-warm-600 rounded-full transition-all duration-1000 ease-out"
+          className="h-full rounded-full bg-gradient-to-r from-gold-400 to-gold-600 transition-all duration-1000 ease-out"
           style={{ width: `${displayProgress}%` }}
         />
       </div>

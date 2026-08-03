@@ -6,6 +6,8 @@ import { z } from 'zod';
 import { Mail, Lock, User, ArrowRight } from 'lucide-react';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
+import VaultBackdrop from '../components/layout/VaultBackdrop';
+import VaultMark from '../components/layout/VaultMark';
 import { authService } from '../services/auth';
 import useAuthStore from '../store/authStore';
 import toast from 'react-hot-toast';
@@ -52,27 +54,27 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-parchment relative overflow-hidden">
-      {/* Ambient orbs */}
-      <div className="absolute top-20 -right-32 w-96 h-96 bg-amber-200/20 rounded-full blur-3xl animate-float" />
-      <div className="absolute -bottom-20 -left-32 w-96 h-96 bg-orange-100/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '1.5s' }} />
+    <div className="min-h-screen flex items-center justify-center p-4 relative">
+      <VaultBackdrop />
 
       <div className="w-full max-w-md relative z-10 animate-slideUp">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-emerald-700 shadow-lg mb-4">
-            <span className="text-white font-bold text-2xl">W</span>
-          </div>
-          <h1 className="text-2xl font-bold text-warm-900 mb-1">
-            What Did I Sign?
+          <VaultMark size={58} className="mb-4" />
+          <h1 className="font-display text-3xl font-semibold text-warm-900 mb-1.5">
+            What I Signed
           </h1>
-          <p className="text-sm text-warm-500">Your personal agreement vault</p>
+          <p className="text-[11px] tracking-[0.16em] uppercase text-mocha-600">
+            Your personal agreement vault
+          </p>
         </div>
 
         {/* Form Card */}
-        <div className="bg-white/90 border border-cream-300/60 shadow-lg rounded-2xl p-8">
-          <h2 className="text-lg font-semibold text-warm-900 mb-1">Create your account</h2>
-          <p className="text-sm text-warm-500 mb-6">Start securing your agreements</p>
+        <div className="glass-strong rounded-2xl p-8">
+          <h2 className="font-display text-xl font-semibold text-warm-900 mb-1">
+            Create your account
+          </h2>
+          <p className="text-sm text-mocha-700 mb-6">Start securing your agreements</p>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <Input
@@ -123,11 +125,11 @@ export default function Register() {
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-sm text-warm-500">
+            <p className="text-sm text-mocha-700">
               Already have an account?{' '}
               <Link
                 to="/login"
-                className="text-warm-700 hover:text-warm-900 font-medium transition-colors"
+                className="text-gold-700 hover:text-gold-800 font-medium underline underline-offset-2 transition-colors"
               >
                 Sign in
               </Link>

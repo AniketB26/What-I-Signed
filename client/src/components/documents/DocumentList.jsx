@@ -36,12 +36,12 @@ export default function DocumentList({ documents, isLoading }) {
     <div className="space-y-5">
       {/* Filter bar */}
       <div className="flex flex-wrap items-center gap-3">
-        <span className="text-sm font-medium text-warm-600">Filter By:</span>
+        <span className="text-sm font-medium text-mocha-700">Filter By:</span>
 
         <select
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
-          className="bg-white/80 border border-cream-300 rounded-xl px-3 py-2 text-xs text-warm-700 focus:outline-none focus:border-warm-500 appearance-none cursor-pointer hover:border-warm-400 transition-all"
+          className="glass-chip rounded-full px-4 py-2 text-xs text-warm-800 focus:outline-none appearance-none cursor-pointer"
         >
           {docTypes.map((opt) => (
             <option key={opt.value} value={opt.value}>
@@ -53,7 +53,7 @@ export default function DocumentList({ documents, isLoading }) {
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="bg-white/80 border border-cream-300 rounded-xl px-3 py-2 text-xs text-warm-700 focus:outline-none focus:border-warm-500 appearance-none cursor-pointer hover:border-warm-400 transition-all"
+          className="glass-chip rounded-full px-4 py-2 text-xs text-warm-800 focus:outline-none appearance-none cursor-pointer"
         >
           {statusOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>
@@ -65,7 +65,7 @@ export default function DocumentList({ documents, isLoading }) {
         {(typeFilter || statusFilter) && (
           <button
             onClick={() => { setTypeFilter(''); setStatusFilter(''); }}
-            className="text-xs text-warm-600 hover:text-warm-800 transition-colors"
+            className="text-xs text-mocha-700 hover:text-warm-900 underline underline-offset-2 transition-colors"
           >
             Clear filters
           </button>

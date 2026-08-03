@@ -4,22 +4,32 @@ import Button from './Button';
 export default function EmptyState({
   icon: Icon = Inbox,
   title = 'No data found',
-  description = 'There\'s nothing here yet.',
+  description = "There's nothing here yet.",
   actionLabel,
   onAction,
   className = '',
 }) {
   return (
-    <div className={`flex flex-col items-center justify-center py-16 px-6 animate-fadeIn ${className}`}>
-      <div className="relative mb-6">
-        <div className="relative bg-cream-200/60 rounded-full p-5">
-          <Icon size={32} className="text-warm-400" />
+    <div
+      className={`glass flex flex-col items-center justify-center py-20 px-6 animate-fadeIn ${className}`}
+    >
+      {/* Frosted disc holding the icon */}
+      <div className="relative mb-7">
+        <div className="absolute inset-0 rounded-full bg-gold-300/25 blur-2xl scale-150" />
+        <div className="glass-soft relative rounded-full p-6">
+          <Icon size={34} strokeWidth={1.5} className="text-gold-600" />
         </div>
       </div>
-      <h3 className="text-lg font-semibold text-warm-900 mb-2">{title}</h3>
-      <p className="text-sm text-warm-500 text-center max-w-sm mb-6">{description}</p>
+
+      <h3 className="font-display text-2xl font-semibold text-warm-900 mb-2.5 text-center">
+        {title}
+      </h3>
+      <p className="text-sm text-mocha-700 text-center max-w-md leading-relaxed mb-7">
+        {description}
+      </p>
+
       {actionLabel && onAction && (
-        <Button onClick={onAction} size="sm">
+        <Button onClick={onAction} size="md">
           {actionLabel}
         </Button>
       )}

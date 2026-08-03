@@ -7,25 +7,25 @@ export default function SourceCitation({ source }) {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-white/80 border border-cream-300/60 rounded-xl overflow-hidden transition-all duration-300 hover:border-warm-400/50 shadow-sm">
+    <div className="glass-tile overflow-hidden transition-all duration-300 hover:border-gold-300/70">
       <div
         className="flex items-center gap-3 px-4 py-3 cursor-pointer group"
         onClick={() => setExpanded(!expanded)}
       >
-        <div className="p-1.5 rounded-lg bg-warm-100 flex-shrink-0">
-          <FileText size={14} className="text-warm-600" />
+        <div className="glass-soft !rounded-lg p-1.5 flex-shrink-0">
+          <FileText size={14} strokeWidth={1.8} className="text-gold-600" />
         </div>
 
         <div className="flex-1 min-w-0">
-          <p className="text-xs font-medium text-warm-800 truncate">
+          <p className="text-xs font-medium text-warm-900 truncate">
             {source.documentName || source.name || 'Source document'}
           </p>
           <div className="flex items-center gap-2 mt-0.5">
             {source.page && (
-              <span className="text-[10px] text-warm-400">Page {source.page}</span>
+              <span className="text-[10px] text-mocha-600">Page {source.page}</span>
             )}
             {source.relevance && (
-              <span className="text-[10px] text-warm-600">
+              <span className="text-[10px] text-gold-700">
                 {Math.round(source.relevance * 100)}% relevant
               </span>
             )}
@@ -39,23 +39,23 @@ export default function SourceCitation({ source }) {
                 e.stopPropagation();
                 navigate(`/documents/${source.documentId}`);
               }}
-              className="p-1 rounded text-warm-400 hover:text-warm-700 transition-colors"
+              className="p-1 rounded text-mocha-500 hover:text-warm-900 transition-colors"
               title="View document"
             >
               <ExternalLink size={12} />
             </button>
           )}
           {expanded ? (
-            <ChevronUp size={14} className="text-warm-400" />
+            <ChevronUp size={14} className="text-mocha-500" />
           ) : (
-            <ChevronDown size={14} className="text-warm-400" />
+            <ChevronDown size={14} className="text-mocha-500" />
           )}
         </div>
       </div>
 
       {expanded && source.excerpt && (
         <div className="px-4 pb-3 animate-slideDown">
-          <p className="text-xs text-warm-600 leading-relaxed bg-cream-100/60 rounded-lg p-3 border-l-2 border-warm-500/40">
+          <p className="glass-well text-xs text-mocha-800 leading-relaxed p-3 border-l-2 !border-l-gold-400/70">
             "{source.excerpt}"
           </p>
         </div>

@@ -42,7 +42,7 @@ function SummaryTab({ document }) {
       {/* AI Summary */}
       {summary && (
         <Card hover={false}>
-          <h3 className="text-sm font-semibold text-warm-800 mb-3 flex items-center gap-2">
+          <h3 className="text-sm font-semibold text-warm-900 mb-3 flex items-center gap-2">
             <BookOpen size={16} className="text-warm-600" />
             AI Summary
           </h3>
@@ -54,7 +54,7 @@ function SummaryTab({ document }) {
         {/* Parties */}
         {parties.length > 0 && (
           <Card hover={false}>
-            <h3 className="text-sm font-semibold text-warm-800 mb-3 flex items-center gap-2">
+            <h3 className="text-sm font-semibold text-warm-900 mb-3 flex items-center gap-2">
               <Users size={16} className="text-blue-600" />
               Parties
             </h3>
@@ -77,14 +77,14 @@ function SummaryTab({ document }) {
         {/* Key Dates */}
         {keyDates.length > 0 && (
           <Card hover={false}>
-            <h3 className="text-sm font-semibold text-warm-800 mb-3 flex items-center gap-2">
+            <h3 className="text-sm font-semibold text-warm-900 mb-3 flex items-center gap-2">
               <Calendar size={16} className="text-amber-600" />
               Key Dates
             </h3>
             <div className="space-y-2">
               {keyDates.map((item, i) => (
                 <div key={i} className="flex items-center justify-between text-sm">
-                  <span className="text-warm-500">{item.label || item.type}</span>
+                  <span className="text-mocha-700">{item.label || item.type}</span>
                   <span className="text-warm-800 font-medium">
                     {item.date ? format(new Date(item.date), 'MMM dd, yyyy') : item.value}
                   </span>
@@ -97,20 +97,20 @@ function SummaryTab({ document }) {
         {/* Financial Terms */}
         {(clauses.depositAmount || clauses.monthlyAmount) && (
           <Card hover={false} className="md:col-span-2">
-            <h3 className="text-sm font-semibold text-warm-800 mb-3 flex items-center gap-2">
+            <h3 className="text-sm font-semibold text-warm-900 mb-3 flex items-center gap-2">
               <DollarSign size={16} className="text-emerald-600" />
               Financial Terms
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {clauses.depositAmount && (
-                <div className="bg-cream-100/60 rounded-xl p-3">
-                  <p className="text-xs text-warm-400">Deposit</p>
+                <div className="glass-well p-3">
+                  <p className="text-xs text-mocha-600">Deposit</p>
                   <p className="text-sm font-semibold text-emerald-700 mt-1">{clauses.depositAmount}</p>
                 </div>
               )}
               {clauses.monthlyAmount && (
-                <div className="bg-cream-100/60 rounded-xl p-3">
-                  <p className="text-xs text-warm-400">Monthly Amount</p>
+                <div className="glass-well p-3">
+                  <p className="text-xs text-mocha-600">Monthly Amount</p>
                   <p className="text-sm font-semibold text-warm-800 mt-1">{clauses.monthlyAmount}</p>
                 </div>
               )}
@@ -130,8 +130,8 @@ function ClausesTab({ document }) {
   if (!hasContent) {
     return (
       <div className="text-center py-12 animate-fadeIn">
-        <Shield size={32} className="text-warm-300 mx-auto mb-3" />
-        <p className="text-sm text-warm-400">No clauses extracted yet</p>
+        <Shield size={32} className="text-mocha-500 mx-auto mb-3" />
+        <p className="text-sm text-mocha-700">No clauses extracted yet</p>
       </div>
     );
   }
@@ -141,12 +141,12 @@ function ClausesTab({ document }) {
       {clauses.noticePeriod && (
         <Card hover={false}>
           <div className="flex items-start gap-3">
-            <div className="flex-shrink-0 h-7 w-7 rounded-lg bg-warm-100 flex items-center justify-center">
+            <div className="flex-shrink-0 h-7 w-7 rounded-lg bg-white/55 ring-1 ring-white/60 flex items-center justify-center">
               <Shield size={14} className="text-warm-600" />
             </div>
             <div className="flex-1 min-w-0">
-              <h4 className="text-sm font-medium text-warm-800 mb-1">Notice Period</h4>
-              <p className="text-xs text-warm-500 leading-relaxed">{clauses.noticePeriod}</p>
+              <h4 className="text-sm font-medium text-warm-900 mb-1">Notice Period</h4>
+              <p className="text-xs text-mocha-700 leading-relaxed">{clauses.noticePeriod}</p>
             </div>
           </div>
         </Card>
@@ -154,12 +154,12 @@ function ClausesTab({ document }) {
       {clauses.autoRenewal !== undefined && (
         <Card hover={false}>
           <div className="flex items-start gap-3">
-            <div className="flex-shrink-0 h-7 w-7 rounded-lg bg-blue-50 flex items-center justify-center">
+            <div className="flex-shrink-0 h-7 w-7 rounded-lg bg-blue-100/60 ring-1 ring-white/60 flex items-center justify-center">
               <Shield size={14} className="text-blue-600" />
             </div>
             <div className="flex-1 min-w-0">
-              <h4 className="text-sm font-medium text-warm-800 mb-1">Auto Renewal</h4>
-              <p className="text-xs text-warm-500 leading-relaxed">{clauses.autoRenewal ? 'Yes' : 'No'}</p>
+              <h4 className="text-sm font-medium text-warm-900 mb-1">Auto Renewal</h4>
+              <p className="text-xs text-mocha-700 leading-relaxed">{clauses.autoRenewal ? 'Yes' : 'No'}</p>
             </div>
           </div>
         </Card>
@@ -167,12 +167,12 @@ function ClausesTab({ document }) {
       {penaltyClauses.map((clause, i) => (
         <Card key={i} hover={false}>
           <div className="flex items-start gap-3">
-            <div className="flex-shrink-0 h-7 w-7 rounded-lg bg-warm-100 flex items-center justify-center">
+            <div className="flex-shrink-0 h-7 w-7 rounded-lg bg-white/55 ring-1 ring-white/60 flex items-center justify-center">
               <span className="text-xs font-semibold text-warm-600">{i + 1}</span>
             </div>
             <div className="flex-1 min-w-0">
-              <h4 className="text-sm font-medium text-warm-800 mb-1">Penalty Clause</h4>
-              <p className="text-xs text-warm-500 leading-relaxed">{clause}</p>
+              <h4 className="text-sm font-medium text-warm-900 mb-1">Penalty Clause</h4>
+              <p className="text-xs text-mocha-700 leading-relaxed">{clause}</p>
             </div>
           </div>
         </Card>
@@ -189,7 +189,7 @@ function RedFlagsTab({ document }) {
       <div className="text-center py-12 animate-fadeIn">
         <AlertTriangle size={32} className="text-emerald-600 mx-auto mb-3" />
         <p className="text-sm text-emerald-700 font-medium">No red flags detected</p>
-        <p className="text-xs text-warm-400 mt-1">This document looks clean!</p>
+        <p className="text-xs text-mocha-700 mt-1">This document looks clean!</p>
       </div>
     );
   }
@@ -205,7 +205,7 @@ function RedFlagsTab({ document }) {
       {redFlags.map((flag, i) => {
         const colors = severityColors[flag.severity] || severityColors.medium;
         return (
-          <div key={i} className={`bg-white/80 rounded-xl p-4 border ${colors.border} shadow-sm`}>
+          <div key={i} className={`glass-tile p-4 border ${colors.border}`}>
             <div className="flex items-start gap-3">
               <div className={`p-2 rounded-lg ${colors.bg} flex-shrink-0`}>
                 <AlertTriangle size={16} className={colors.text} />
@@ -221,7 +221,7 @@ function RedFlagsTab({ document }) {
                     </Badge>
                   )}
                 </div>
-                <p className="text-xs text-warm-500 leading-relaxed">{flag.explanation || ''}</p>
+                <p className="text-xs text-mocha-700 leading-relaxed">{flag.explanation || ''}</p>
               </div>
             </div>
           </div>
@@ -273,9 +273,9 @@ export default function DocumentDetail() {
   if (error || !document) {
     return (
       <div className="text-center py-20 animate-fadeIn">
-        <FileText size={48} className="text-warm-300 mx-auto mb-4" />
-        <h2 className="text-lg font-semibold text-warm-800 mb-2">Document not found</h2>
-        <p className="text-sm text-warm-400 mb-4">The document you're looking for doesn't exist.</p>
+        <FileText size={48} className="text-mocha-500 mx-auto mb-4" />
+        <h2 className="font-display text-2xl font-semibold text-warm-900 mb-2">Document not found</h2>
+        <p className="text-sm text-mocha-700 mb-4">The document you're looking for doesn't exist.</p>
         <Button onClick={() => navigate('/documents')} variant="secondary" icon={ArrowLeft}>
           Back to Documents
         </Button>
@@ -290,28 +290,28 @@ export default function DocumentDetail() {
       {/* Back button */}
       <button
         onClick={() => navigate('/documents')}
-        className="flex items-center gap-2 text-sm text-warm-500 hover:text-warm-800 transition-colors group"
+        className="flex items-center gap-2 text-sm text-mocha-700 hover:text-warm-900 transition-colors group"
       >
         <ArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
         Back to Documents
       </button>
 
       {/* Header */}
-      <div className="bg-white/80 border border-cream-300/60 rounded-2xl shadow-sm p-6">
+      <div className="glass p-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="p-3 rounded-xl bg-warm-100">
-              <FileText size={24} className="text-warm-600" />
+            <div className="glass-soft !rounded-xl p-3">
+              <FileText size={24} strokeWidth={1.7} className="text-gold-600" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-warm-900">
+              <h1 className="font-display text-2xl font-semibold text-warm-900">
                 {document.originalName || document.name}
               </h1>
               <div className="flex flex-wrap items-center gap-2 mt-2">
                 {document.docType && <Badge docType={document.docType} />}
                 <Badge status={document.status} />
                 {document.createdAt && (
-                  <span className="flex items-center gap-1 text-xs text-warm-400">
+                  <span className="flex items-center gap-1 text-xs text-mocha-600">
                     <Clock size={12} />
                     {formatDistanceToNow(new Date(document.createdAt), { addSuffix: true })}
                   </span>
@@ -322,7 +322,7 @@ export default function DocumentDetail() {
         </div>
 
         {isProcessing && (
-          <div className="mt-4 pt-4 border-t border-cream-300/50">
+          <div className="mt-4 pt-4 border-t border-white/45">
             <ProcessingStatus documentId={document._id} />
           </div>
         )}
@@ -331,17 +331,17 @@ export default function DocumentDetail() {
       {/* Tabs */}
       {!isProcessing && (
         <>
-          <div className="flex gap-1 bg-white/60 rounded-xl p-1 border border-cream-300/60">
+          <div className="glass-soft flex gap-1.5 !rounded-full p-1.5 w-fit">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`
-                  flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium
+                  flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium
                   transition-all duration-200
                   ${activeTab === tab.id
-                    ? 'bg-warm-700 text-white shadow-sm'
-                    : 'text-warm-500 hover:text-warm-800 hover:bg-cream-200/60'
+                    ? 'btn-primary-glass'
+                    : 'text-mocha-700 hover:text-warm-900 hover:bg-white/50'
                   }
                 `}
               >

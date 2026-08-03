@@ -28,26 +28,26 @@ export default function Compare() {
   return (
     <div className="space-y-8 animate-fadeIn">
       <div>
-        <h1 className="text-2xl font-bold text-warm-900">
-          Document Comparison – Professional View
+        <h1 className="heading-display text-3xl md:text-[2.5rem] leading-tight">
+          Document Comparison
         </h1>
-        <p className="text-sm text-warm-500 mt-2">
+        <p className="text-sm text-mocha-700 mt-2">
           See how two agreements differ on a specific topic
         </p>
       </div>
 
-      <Card>
-        <form onSubmit={handleCompare} className="space-y-6 p-6">
+      <Card hover={false} padding={false}>
+        <form onSubmit={handleCompare} className="space-y-6 p-6 md:p-7">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Document A */}
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-warm-700">
+              <label className="block text-sm font-medium text-warm-800">
                 Document A
               </label>
               <select
                 value={docIdA}
                 onChange={(e) => setDocIdA(e.target.value)}
-                className="w-full bg-white/80 border border-cream-300 rounded-xl px-4 py-3 text-warm-800 focus:outline-none focus:ring-2 focus:ring-warm-500/30 focus:border-warm-500 transition-all"
+                className="glass-input w-full rounded-xl px-4 py-3 text-sm text-warm-900 focus:outline-none cursor-pointer"
               >
                 <option value="">Select a document...</option>
                 {readyDocs.map(doc => (
@@ -60,13 +60,13 @@ export default function Compare() {
 
             {/* Document B */}
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-warm-700">
+              <label className="block text-sm font-medium text-warm-800">
                 Document B
               </label>
               <select
                 value={docIdB}
                 onChange={(e) => setDocIdB(e.target.value)}
-                className="w-full bg-white/80 border border-cream-300 rounded-xl px-4 py-3 text-warm-800 focus:outline-none focus:ring-2 focus:ring-warm-500/30 focus:border-warm-500 transition-all"
+                className="glass-input w-full rounded-xl px-4 py-3 text-sm text-warm-900 focus:outline-none cursor-pointer"
               >
                 <option value="">Select a document...</option>
                 {readyDocs.map(doc => (
@@ -80,16 +80,16 @@ export default function Compare() {
 
           {/* Comparison Topic */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-warm-700">
+            <label className="block text-sm font-medium text-warm-800">
               What do you want to compare?
             </label>
-            <div className="relative">
+            <div className="glass-input rounded-xl">
               <input
                 type="text"
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
                 placeholder="e.g., maintenance responsibilities, termination clauses, payment terms..."
-                className="w-full bg-white/80 border border-cream-300 rounded-xl px-4 py-3 text-warm-800 placeholder-warm-400 focus:outline-none focus:ring-2 focus:ring-warm-500/30 focus:border-warm-500 transition-all"
+                className="w-full bg-transparent px-4 py-3 text-sm text-warm-900 placeholder:text-mocha-500/85 focus:outline-none"
               />
             </div>
           </div>
@@ -100,9 +100,9 @@ export default function Compare() {
             size="lg"
             loading={isPending}
             disabled={!docIdA || !docIdB || !topic.trim() || isPending}
+            icon={isPending ? undefined : ArrowLeftRight}
             className="w-full"
           >
-            <ArrowLeftRight className="w-5 h-5 mr-2" />
             Compare Documents
           </Button>
         </form>
@@ -110,66 +110,58 @@ export default function Compare() {
 
       {/* Results */}
       {isPending && (
-        <Card>
+        <Card hover={false}>
           <div className="flex items-center justify-center py-12 space-x-3">
-            <Loader2 className="w-6 h-6 text-warm-500 animate-spin" />
-            <span className="text-warm-500">Analyzing and comparing documents...</span>
+            <Loader2 className="w-6 h-6 text-gold-600 animate-spin" />
+            <span className="text-mocha-700">Analyzing and comparing documents...</span>
           </div>
         </Card>
       )}
 
       {result?.data && (
-        <div className="space-y-6 animate-slideUp">
+        <div className="space-y-5 animate-slideUp">
           {/* Document headers */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {selectedDocA && (
-              <div className="bg-white/80 border border-cream-300/60 rounded-xl p-4 shadow-sm flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-warm-100">
-                    <FileText size={16} className="text-warm-600" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {[selectedDocA, selectedDocB].filter(Boolean).map((doc, i) => (
+              <div
+                key={doc._id}
+                className="glass-tile flex items-center justify-between gap-3 p-4"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <span className="text-[10px] font-semibold tracking-[0.14em] uppercase text-gold-600 flex-shrink-0">
+                    {i === 0 ? 'A' : 'B'}
+                  </span>
+                  <div className="glass-soft !rounded-lg p-2 flex-shrink-0">
+                    <FileText size={16} strokeWidth={1.7} className="text-mocha-600" />
                   </div>
-                  <span className="text-sm font-medium text-warm-800 truncate">{selectedDocA.originalName}</span>
+                  <span className="text-sm font-medium text-warm-900 truncate">
+                    {doc.originalName}
+                  </span>
                 </div>
-                <div className="flex gap-2">
-                  <button className="flex items-center gap-1 text-xs text-warm-600 hover:text-warm-800 bg-cream-100 px-2.5 py-1.5 rounded-lg transition-colors">
+                <div className="flex gap-2 flex-shrink-0">
+                  <button className="glass-chip flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs text-mocha-700 hover:text-warm-900">
                     <Eye size={12} /> View
                   </button>
-                  <button className="flex items-center gap-1 text-xs text-white bg-warm-700 hover:bg-warm-800 px-2.5 py-1.5 rounded-lg transition-colors">
+                  <button className="btn-primary-glass flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs transition-all active:scale-[0.97]">
                     <Download size={12} /> Download
                   </button>
                 </div>
               </div>
-            )}
-            {selectedDocB && (
-              <div className="bg-white/80 border border-cream-300/60 rounded-xl p-4 shadow-sm flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-warm-100">
-                    <FileText size={16} className="text-warm-600" />
-                  </div>
-                  <span className="text-sm font-medium text-warm-800 truncate">{selectedDocB.originalName}</span>
-                </div>
-                <div className="flex gap-2">
-                  <button className="flex items-center gap-1 text-xs text-warm-600 hover:text-warm-800 bg-cream-100 px-2.5 py-1.5 rounded-lg transition-colors">
-                    <Eye size={12} /> View
-                  </button>
-                  <button className="flex items-center gap-1 text-xs text-white bg-warm-700 hover:bg-warm-800 px-2.5 py-1.5 rounded-lg transition-colors">
-                    <Download size={12} /> Download
-                  </button>
-                </div>
-              </div>
-            )}
+            ))}
           </div>
 
           {/* Comparison Results */}
-          <Card>
-            <div className="p-6 space-y-4">
-              <h2 className="text-lg font-semibold text-warm-900 flex items-center gap-2">
-                Key Differences & Analysis
+          <Card hover={false} padding={false}>
+            <div className="flex items-center justify-between px-6 py-4 border-b border-white/45">
+              <h2 className="font-display text-lg font-semibold text-warm-900">
+                Key Differences &amp; Analysis
               </h2>
-              <div className="border-b border-cream-300/50 pb-2 mb-4">
-                <h3 className="text-sm font-semibold text-warm-800">Summary</h3>
-              </div>
-              <div className="text-sm text-warm-700 leading-relaxed whitespace-pre-wrap">
+            </div>
+            <div className="p-6 space-y-4">
+              <h3 className="text-[11px] font-semibold tracking-[0.14em] uppercase text-gold-600">
+                Summary
+              </h3>
+              <div className="glass-well p-5 text-sm text-mocha-800 leading-relaxed whitespace-pre-wrap">
                 {result.data.comparison}
               </div>
             </div>

@@ -13,24 +13,9 @@ import Button from '../ui/Button';
 import { useDismissAlert, useSnoozeAlert } from '../../hooks/useAlerts';
 
 const severityConfig = {
-  info: {
-    icon: Info,
-    bg: 'bg-blue-50',
-    border: 'border-blue-200',
-    text: 'text-blue-600',
-  },
-  warning: {
-    icon: AlertTriangle,
-    bg: 'bg-amber-50',
-    border: 'border-amber-200',
-    text: 'text-amber-600',
-  },
-  critical: {
-    icon: AlertCircle,
-    bg: 'bg-red-50',
-    border: 'border-red-200',
-    text: 'text-red-600',
-  },
+  info: { icon: Info, text: 'text-blue-600', rail: 'bg-blue-400/70' },
+  warning: { icon: AlertTriangle, text: 'text-gold-600', rail: 'bg-gold-500/80' },
+  critical: { icon: AlertCircle, text: 'text-red-600', rail: 'bg-red-500/80' },
 };
 
 export default function AlertCard({ alert }) {
@@ -47,23 +32,23 @@ export default function AlertCard({ alert }) {
   return (
     <div
       className={`
-        bg-white/80 border border-cream-300/60 rounded-2xl shadow-sm overflow-hidden
-        transition-all duration-300
-        hover:shadow-md
-        hover:-translate-y-0.5
+        glass-tile glass-hover relative overflow-hidden
         ${alert.dismissed ? 'opacity-50' : ''}
       `}
     >
-      <div className="p-5">
+      {/* Severity rail down the left edge */}
+      <span className={`absolute inset-y-0 left-0 w-[3px] ${severity.rail}`} />
+
+      <div className="p-5 pl-6">
         <div className="flex items-start gap-4">
           {/* Icon */}
-          <div className={`p-2.5 rounded-xl ${severity.bg} flex-shrink-0`}>
-            <SeverityIcon size={18} className={severity.text} />
+          <div className="glass-soft !rounded-xl p-2.5 flex-shrink-0">
+            <SeverityIcon size={18} strokeWidth={1.8} className={severity.text} />
           </div>
 
           {/* Content */}
           <div className="flex-1 min-w-0 space-y-2">
-            <p className="text-sm text-warm-800 leading-relaxed">
+            <p className="text-sm text-warm-900 leading-relaxed">
               {alert.message}
             </p>
 
@@ -71,7 +56,7 @@ export default function AlertCard({ alert }) {
             {alert.documentName && (
               <button
                 onClick={() => alert.documentId && navigate(`/documents/${alert.documentId}`)}
-                className="flex items-center gap-1.5 text-xs text-warm-600 hover:text-warm-800 transition-colors group"
+                className="flex items-center gap-1.5 text-xs text-mocha-700 hover:text-warm-900 transition-colors group"
               >
                 <FileText size={12} />
                 <span className="group-hover:underline">{alert.documentName}</span>
@@ -80,7 +65,7 @@ export default function AlertCard({ alert }) {
 
             {/* Due date */}
             {dueDate && (
-              <div className={`flex items-center gap-1.5 text-xs ${isOverdue ? 'text-red-500' : 'text-warm-400'}`}>
+              <div className={`flex items-center gap-1.5 text-xs ${isOverdue ? 'text-red-600' : 'text-mocha-600'}`}>
                 <Clock size={12} />
                 <span>
                   {isOverdue ? 'Overdue — ' : ''}

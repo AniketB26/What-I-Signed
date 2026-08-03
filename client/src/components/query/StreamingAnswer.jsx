@@ -9,13 +9,13 @@ function parseMarkdown(text) {
     // Italic
     .replace(/\*(.*?)\*/g, '<em>$1</em>')
     // Inline code
-    .replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 rounded bg-cream-200 text-warm-700 text-xs font-mono">$1</code>')
+    .replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 rounded bg-white/60 text-gold-800 text-xs font-mono">$1</code>')
     // Blockquotes
-    .replace(/^> (.+)$/gm, '<blockquote class="border-l-2 border-warm-500 pl-3 my-2 text-warm-500 italic">$1</blockquote>')
+    .replace(/^> (.+)$/gm, '<blockquote class="border-l-2 border-gold-400 pl-3 my-2 text-mocha-700 italic">$1</blockquote>')
     // Unordered lists
-    .replace(/^[-•] (.+)$/gm, '<li class="ml-4 list-disc text-warm-700">$1</li>')
+    .replace(/^[-•] (.+)$/gm, '<li class="ml-4 list-disc text-mocha-800">$1</li>')
     // Ordered lists
-    .replace(/^\d+\. (.+)$/gm, '<li class="ml-4 list-decimal text-warm-700">$1</li>')
+    .replace(/^\d+\. (.+)$/gm, '<li class="ml-4 list-decimal text-mocha-800">$1</li>')
     // Headers
     .replace(/^### (.+)$/gm, '<h4 class="text-base font-semibold text-warm-900 mt-3 mb-1">$1</h4>')
     .replace(/^## (.+)$/gm, '<h3 class="text-lg font-semibold text-warm-900 mt-4 mb-2">$1</h3>')
@@ -38,17 +38,17 @@ export default function StreamingAnswer({ answer, isStreaming }) {
   if (!answer && !isStreaming) return null;
 
   return (
-    <div className="bg-white/80 border border-cream-300/60 rounded-2xl shadow-sm overflow-hidden animate-slideUp">
+    <div className="glass overflow-hidden animate-slideUp">
       {/* Header */}
-      <div className="flex items-center gap-2.5 px-5 py-3 border-b border-cream-300/50">
-        <div className="p-1.5 rounded-lg bg-warm-100">
-          <Bot size={16} className="text-warm-600" />
+      <div className="flex items-center gap-2.5 px-5 py-3.5 border-b border-white/45">
+        <div className="glass-soft !rounded-lg p-1.5">
+          <Bot size={16} strokeWidth={1.8} className="text-gold-600" />
         </div>
-        <span className="text-sm font-medium text-warm-700">AI Answer</span>
+        <span className="text-sm font-medium text-warm-900">AI Answer</span>
         {isStreaming && (
           <div className="flex items-center gap-1.5 ml-auto">
-            <Loader2 size={12} className="text-warm-500 animate-spin" />
-            <span className="text-xs text-warm-400">Generating...</span>
+            <Loader2 size={12} className="text-gold-600 animate-spin" />
+            <span className="text-xs text-mocha-600">Generating...</span>
           </div>
         )}
       </div>
@@ -60,23 +60,23 @@ export default function StreamingAnswer({ answer, isStreaming }) {
       >
         {answer ? (
           <div
-            className="text-sm text-warm-700 leading-relaxed"
+            className="text-sm text-mocha-800 leading-relaxed"
             dangerouslySetInnerHTML={{ __html: parseMarkdown(answer) }}
           />
         ) : isStreaming ? (
           <div className="flex items-center gap-2">
             <div className="flex gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-warm-500 animate-pulse" style={{ animationDelay: '0ms' }} />
-              <span className="w-1.5 h-1.5 rounded-full bg-warm-400 animate-pulse" style={{ animationDelay: '150ms' }} />
-              <span className="w-1.5 h-1.5 rounded-full bg-warm-300 animate-pulse" style={{ animationDelay: '300ms' }} />
+              <span className="w-1.5 h-1.5 rounded-full bg-gold-500 animate-pulse" style={{ animationDelay: '0ms' }} />
+              <span className="w-1.5 h-1.5 rounded-full bg-gold-400 animate-pulse" style={{ animationDelay: '150ms' }} />
+              <span className="w-1.5 h-1.5 rounded-full bg-gold-300 animate-pulse" style={{ animationDelay: '300ms' }} />
             </div>
-            <span className="text-sm text-warm-400">Thinking...</span>
+            <span className="text-sm text-mocha-600">Thinking...</span>
           </div>
         ) : null}
 
         {/* Blinking cursor while streaming */}
         {isStreaming && answer && (
-          <span className="inline-block w-0.5 h-4 bg-warm-500 animate-pulse ml-0.5 align-middle" />
+          <span className="inline-block w-0.5 h-4 bg-gold-600 animate-pulse ml-0.5 align-middle" />
         )}
       </div>
     </div>

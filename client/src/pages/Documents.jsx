@@ -9,17 +9,18 @@ export default function Documents() {
   const [showUpload, setShowUpload] = useState(false);
   const { data, isLoading } = useDocuments();
 
-  const documents = data?.data?.documents || data?.documents || (Array.isArray(data) ? data : []);
+  const documents =
+    data?.data?.documents || data?.documents || (Array.isArray(data) ? data : []);
 
   return (
-    <div className="space-y-6 animate-fadeIn">
+    <div className="space-y-7 animate-fadeIn">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-warm-900">
+          <h1 className="heading-display text-3xl md:text-[2.5rem] leading-tight">
             Documents
           </h1>
-          <p className="text-sm text-warm-500 mt-1">
+          <p className="text-sm text-mocha-700 mt-2">
             Manage and analyze your agreements
           </p>
         </div>
