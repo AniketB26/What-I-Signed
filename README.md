@@ -7,7 +7,7 @@
   <img src="https://img.shields.io/badge/Groq-Llama%203.3-F55036" />
 </p>
 
-# 📜 What Did I Sign?
+# 📜 What I Sign?
 
 > **RAG-Powered Personal Agreement Vault** — Upload, analyze, and intelligently query your contracts and legal documents using AI.
 
