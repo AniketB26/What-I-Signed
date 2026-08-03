@@ -49,7 +49,7 @@
 | 🚨 **Smart Alerts** | Automatic alerts for expiry dates, renewal deadlines, and red flags |
 | 🔐 **Secure Auth** | JWT access tokens + httpOnly refresh cookies with automatic silent refresh |
 | 🌊 **Real-time Streaming** | SSE-based streaming for both processing status and AI answers |
-| 🎨 **Premium Dark UI** | Glassmorphism design with gradient accents, micro-animations, and responsive layout |
+| 🎨 **Premium Glass UI** | Warm glassmorphism design with frosted panels, bronze accents, micro-animations, and a responsive layout |
 
 ---
 
@@ -60,7 +60,7 @@
 |-----------|---------|
 | **React 19** | UI framework |
 | **Vite 8** | Build tool & dev server with HMR |
-| **Tailwind CSS 3** | Utility-first styling + custom glassmorphism design system |
+| **Tailwind CSS 3** | Utility-first styling + custom warm glassmorphism design system |
 | **TanStack React Query 5** | Server state management, caching, mutations |
 | **Zustand 5** | Client state management (auth store) |
 | **React Router 7** | Client-side routing |
@@ -125,7 +125,7 @@
 
 | Page | Route | Key Features |
 |------|-------|-------------|
-| **Login** | `/login` | Email/password form, Zod validation, ambient blur orbs |
+| **Login** | `/login` | Email/password form, Zod validation, frosted card over the vault backdrop |
 | **Register** | `/register` | Name/email/password/confirm form, password match validation |
 | **Dashboard** | `/dashboard` | Animated stat counters, quick query, recent alerts & documents |
 | **Documents** | `/documents` | Upload zone toggle, filterable document grid (type + status) |
@@ -136,21 +136,38 @@
 
 ### Design System
 
-The UI uses a custom **glassmorphism design system** built on Tailwind CSS:
+The UI is a warm **glassmorphism design system** built on Tailwind CSS. Every
+surface is a frosted pane: a translucent warm-white gradient over a real
+`backdrop-filter`, a 1px specular top edge, and a layered drop shadow so panels
+float above the backdrop rather than sit painted onto it.
 
-| Class | Effect |
-|-------|--------|
-| `.glass` | `bg-slate-900/50 backdrop-blur-xl border-slate-700/50` — Standard glass panel |
-| `.glass-light` | `bg-slate-800/30 backdrop-blur-lg border-slate-700/30` — Lighter variant |
-| `.glass-strong` | `bg-slate-900/80 backdrop-blur-2xl border-slate-700/60` — Opaque variant |
-| `.gradient-text` | Animated violet → blue → cyan text gradient |
-| `.gradient-border` | Pseudo-element gradient border using `mask-composite` |
+All classes are defined in `client/src/index.css`:
 
-**Custom animations:** fadeIn, slideUp, slideDown, scaleIn, pulse, shimmer (skeleton loading), float
+| Class | Use |
+|-------|-----|
+| `.glass` | Standard panel — content cards, answer panes, empty states |
+| `.glass-strong` | Chrome that needs more opacity — sidebar, navbar, modals |
+| `.glass-soft` | Nested elements sitting inside another glass surface |
+| `.glass-tile` | Flatter tile for stat rows, document cards, alerts |
+| `.glass-well` | Recessed surface — upload dropzone, quoted excerpts |
+| `.glass-input` | Inputs and search pills, with focus ring and hover states |
+| `.glass-chip` | Small interactive chips — filters, suggestions, tabs |
+| `.glass-hover` | Lift-on-hover for clickable panes |
+| `.btn-primary-glass` / `.btn-gold-glass` | Bronze and gold gradient buttons |
+| `.heading-display` | Playfair Display heading treatment |
 
-**Font:** Inter (Google Fonts, weights 300–900)
+**Backdrop:** `VaultBackdrop` renders a mocha field with a cream light source,
+two slowly drifting colour pools, a vignette and film grain — glass only reads
+as glass when there is something varied behind it to refract.
 
-**Color palette:** Slate-950 background, violet/blue/cyan accents, severity-coded alerts (blue/amber/rose)
+**Custom animations:** fadeIn, slideUp, slideDown, scaleIn, pulse, shimmer
+(skeleton loading), float, sheen, driftSlow. All are disabled under
+`prefers-reduced-motion`.
+
+**Fonts:** Playfair Display for display headings, Inter for UI text.
+
+**Color palette:** `mocha` (backdrop taupe) and `gold` (bronze accent) scales,
+with warm-white glass surfaces and severity-coded alerts (blue/gold/red).
 
 ---
 
