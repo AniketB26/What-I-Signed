@@ -15,11 +15,29 @@ import dashboardRoutes from './routes/dashboard.routes.js';
 
 const app = express();
 
+// Behind nginx or a PaaS router, the client IP arrives in X-Forwarded-For and
+// the original scheme in X-Forwarded-Proto. Without this, express-rate-limit
+// buckets every request under the proxy's IP and `secure` cookies are dropped.
+app.set('trust proxy', Number(process.env.TRUST_PROXY_HOPS) || 1);
+
 // ── Security & parsing ──
 app.use(helmet());
+
+// CLIENT_URL accepts a comma-separated list so preview/staging origins can be
+// allowed alongside production without a rebuild.
+const allowedOrigins = (process.env.CLIENT_URL || 'http://localhost:5173')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: (origin, callback) => {
+      // Same-origin requests and non-browser clients (curl, health probes)
+      // arrive without an Origin header.
+      if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(new Error(`Origin ${origin} is not allowed by CORS`));
+    },
     credentials: true,
   })
 );

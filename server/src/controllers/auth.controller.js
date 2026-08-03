@@ -24,17 +24,39 @@ const generateTokens = (userId) => {
 };
 
 /**
+ * Cookie attributes for the refresh token.
+ *
+ * `clearCookie` only matches a cookie whose name, path, domain, secure and
+ * sameSite all agree with how it was set, so both paths must share this object
+ * or logout silently leaves the cookie in place.
+ *
+ * When the API and the SPA are served from different sites (e.g. Vercel front
+ * end + Render API), the browser drops a `Lax` cookie on the cross-site XHR.
+ * Set COOKIE_SAMESITE=None (which forces Secure) for that topology.
+ */
+const refreshCookieOptions = () => {
+  const sameSite = process.env.COOKIE_SAMESITE || 'Lax';
+  const secure =
+    sameSite.toLowerCase() === 'none' || process.env.NODE_ENV === 'production';
+
+  return {
+    httpOnly: true,
+    secure,
+    sameSite,
+    path: '/',
+    ...(process.env.COOKIE_DOMAIN ? { domain: process.env.COOKIE_DOMAIN } : {}),
+  };
+};
+
+/**
  * Set the refresh token as an httpOnly cookie.
  * @param {import('express').Response} res
  * @param {string} refreshToken
  */
 const setRefreshCookie = (res, refreshToken) => {
   res.cookie('refreshToken', refreshToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'Lax',
+    ...refreshCookieOptions(),
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    path: '/',
   });
 };
 
@@ -138,11 +160,7 @@ export const login = asyncHandler(async (req, res) => {
  * @access  Public
  */
 export const logout = asyncHandler(async (req, res) => {
-  res.clearCookie('refreshToken', {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'Strict',
-  });
+  res.clearCookie('refreshToken', refreshCookieOptions());
 
   res.json({
     success: true,
