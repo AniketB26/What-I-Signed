@@ -1,5 +1,5 @@
 {
-  "name": "what-did-i-sign",
+  "name": "what-i-signed",
   "version": "1.0.0",
   "private": true,
   "description": "RAG-powered Personal Agreement Vault",

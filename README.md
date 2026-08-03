@@ -7,11 +7,11 @@
   <img src="https://img.shields.io/badge/Groq-Llama%203.3-F55036" />
 </p>
 
-# 📜 What I Sign?
+# 📜 What I Signed
 
 > **RAG-Powered Personal Agreement Vault** — Upload, analyze, and intelligently query your contracts and legal documents using AI.
 
-**What I Sign?** is a full-stack AI application that lets you upload legal documents (contracts, offer letters, insurance policies, NDAs, lease agreements), automatically extracts and analyzes their contents, stores them as vector embeddings, and lets you ask natural language questions about them — with cited sources.
+**What I Signed** is a full-stack AI application that lets you upload legal documents (contracts, offer letters, insurance policies, NDAs, lease agreements), automatically extracts and analyzes their contents, stores them as vector embeddings, and lets you ask natural language questions about them — with cited sources.
 
 ---
 
@@ -28,8 +28,10 @@
 - [Database Models](#-database-models)
 - [API Reference](#-api-reference)
 - [Project Structure](#-project-structure)
-- [Getting Started](#-getting-started)
+- [Run with Docker](#-run-with-docker-recommended)
+- [Getting Started (without Docker)](#-getting-started-without-docker)
 - [Environment Variables](#-environment-variables)
+- [Deployment](#-deployment)
 - [Key Design Decisions](#-key-design-decisions)
 
 ---
@@ -422,11 +424,15 @@ All endpoints return responses in a consistent shape:
 ```
 What-I-Signed/
 ├── .gitignore
+├── .dockerignore                   # Keeps node_modules and secrets out of build context
 ├── .env.example                    # Template for environment variables
+├── docker-compose.yml              # mongo + server + client, wired together
 ├── package.json                    # Root: workspaces config + dev scripts
 ├── package-lock.json
 │
 ├── client/                         # ── FRONTEND ──────────────────────────
+│   ├── Dockerfile                  # Multi-stage: Vite build → nginx
+│   ├── nginx.conf                  # SPA fallback, /api proxy, asset caching
 │   ├── index.html                  # SPA entry point (title, meta, fonts)
 │   ├── package.json                # React + Vite dependencies
 │   ├── vite.config.js              # Vite config + API proxy to :5000
@@ -506,6 +512,7 @@ What-I-Signed/
 │           └── formatDate.js       #   date-fns wrappers
 │
 └── server/                         # ── BACKEND ───────────────────────────
+    ├── Dockerfile                  # Node 22 slim, non-root, healthcheck
     ├── package.json                # Express + AI/DB dependencies
     │
     └── src/
@@ -513,7 +520,7 @@ What-I-Signed/
         ├── app.js                  # Express app: middleware, routes, errors
         │
         ├── config/
-        │   ├── db.js               #   Mongoose connection (TLS enabled)
+        │   ├── db.js               #   Mongoose connection (TLS auto-detected)
         │   ├── cloudinary.js       #   Cloudinary v2 SDK config
         │   ├── pinecone.js         #   Pinecone client + index reference
         │   └── agenda.js           #   Agenda.js job queue config
@@ -576,13 +583,81 @@ What-I-Signed/
 
 ---
 
-## 🚀 Getting Started
+## 🐳 Run with Docker (recommended)
+
+The fastest way to get a working stack. Compose brings up **MongoDB, the API, and
+the nginx-served front end** together — no Atlas account, no local MongoDB install.
 
 ### Prerequisites
 
-- **Node.js** ≥ 18.x
+- **Docker Desktop** (or Docker Engine + Compose v2)
+- API keys for Gemini, Pinecone and Cloudinary (see [Environment Variables](#-environment-variables))
+
+### Quick start
+
+```bash
+# 1. Clone
+git clone https://github.com/AniketB26/What-I-Signed.git
+cd What-I-Signed
+
+# 2. Create the root .env — Compose reads variable substitutions from here
+cp .env.example .env
+
+# 3. Generate the two JWT secrets and paste them into .env
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"   # JWT_SECRET
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"   # JWT_REFRESH_SECRET
+
+# 4. Set CLIENT_URL=http://localhost:8080 and a real MONGO_ROOT_PASSWORD in .env,
+#    then fill in your API keys
+
+# 5. Build and start
+docker compose up --build
+```
+
+Open **http://localhost:8080** and register an account.
+
+> `JWT_SECRET` and `JWT_REFRESH_SECRET` have no defaults — Compose refuses to
+> start without them rather than booting with a guessable signing key.
+
+### What Compose runs
+
+| Service | Image | Port | Notes |
+|---------|-------|------|-------|
+| `mongo` | `mongo:7` | `127.0.0.1:27017` | Data persists in the `mongo-data` volume. Bound to loopback — the API reaches it over the compose network. |
+| `server` | built from `server/Dockerfile` | internal `5000` | Node 22 slim, runs as non-root, `/api/health` healthcheck. |
+| `client` | built from `client/Dockerfile` | `8080` | Vite build served by nginx, which also proxies `/api` → `server`. |
+
+Because nginx proxies `/api` on the **same origin**, the refresh-token cookie stays
+first-party — no CORS preflight and `SameSite=Lax` works as intended.
+
+### Common commands
+
+```bash
+docker compose up -d --build     # rebuild and run detached
+docker compose logs -f server    # tail API logs
+docker compose ps                # health status of each service
+docker compose down              # stop (data survives in the volume)
+docker compose down -v           # stop AND delete the database
+```
+
+### Troubleshooting
+
+| Symptom | Cause / fix |
+|---------|-------------|
+| `JWT_SECRET is required` on `up` | The root `.env` is missing or the secret is blank. |
+| API restarts in a loop | `docker compose logs server` — usually a bad `MONGODB_URI` or a missing API key. |
+| Login works, then logs out on refresh | `CLIENT_URL` doesn't match the origin in the browser's address bar. |
+| Port 8080 already taken | Set `CLIENT_PORT=3000` in `.env`. |
+
+---
+
+## 🚀 Getting Started (without Docker)
+
+### Prerequisites
+
+- **Node.js** ≥ 18.x (22.x recommended)
 - **npm** ≥ 9.x
-- **MongoDB Atlas** account (free tier works)
+- **MongoDB** — either a local install or an Atlas cluster
 - **Pinecone** account with an index named `wdis-documents` (768 dimensions, cosine metric)
 - **Cloudinary** account (free tier works)
 - **Google AI Studio** API key (for Gemini)
@@ -602,8 +677,9 @@ npm install
 cp .env.example server/.env
 # Edit server/.env with your actual keys (see Environment Variables section)
 
-# 4. Ensure MongoDB Atlas has your IP whitelisted
-# Go to Atlas → Network Access → Add IP: 0.0.0.0/0 (for development)
+# 4. Point MONGODB_URI at your database
+#    Local:  mongodb://127.0.0.1:27017/whatisigned
+#    Atlas:  whitelist your IP under Atlas → Network Access first
 
 # 5. Create a Pinecone index
 # Name: wdis-documents
@@ -631,6 +707,29 @@ npm run dev
 ```
 
 > ⚠️ **Important:** Start the backend FIRST and wait for `Server running on port 5000` before starting the frontend. The Vite proxy will return 502 if the backend isn't ready.
+
+### If login or registration fails
+
+Auth failures are almost always the database, not the credentials — the API cannot
+create or look up a user if Mongo is unreachable. Check the backend log first:
+
+| Log line | Meaning | Fix |
+|----------|---------|-----|
+| `querySrv ENOTFOUND ...mongodb.net` | The Atlas cluster hostname doesn't resolve — the cluster was deleted or paused into oblivion. | Create a new cluster and update `MONGODB_URI`, or switch to Docker / a local MongoDB. |
+| `MongoServerError: bad auth` | Wrong user or password in the URI. | Re-copy the connection string from Atlas. |
+| `connect ECONNREFUSED 127.0.0.1:27017` | Local MongoDB isn't running. | Start the MongoDB service. |
+| `MONGODB_URI is not set` | No `server/.env`. | `cp .env.example server/.env` and fill it in. |
+
+Verify the API independently of the UI:
+
+```bash
+curl http://localhost:5000/api/health
+curl -X POST http://localhost:5000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Test","email":"test@example.com","password":"TestPass123!"}'
+```
+
+A healthy register returns `{"success":true,...}` with an `accessToken`.
 
 ---
 
@@ -669,7 +768,7 @@ GROQ_API_KEY=gsk_...
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `MONGODB_URI` | ✅ | MongoDB Atlas connection string with TLS |
+| `MONGODB_URI` | ✅ | Connection string. Atlas (`mongodb+srv://…`) or local (`mongodb://…`). TLS is enabled automatically for `+srv` and left off otherwise, so both work unchanged. |
 | `PINECONE_API_KEY` | ✅ | Pinecone API key from console.pinecone.io |
 | `PINECONE_INDEX` | ✅ | Index name (default: `wdis-documents`) |
 | `JWT_SECRET` | ✅ | Secret for signing access tokens |
@@ -679,6 +778,74 @@ GROQ_API_KEY=gsk_...
 | `CLOUDINARY_API_SECRET` | ✅ | From Cloudinary dashboard |
 | `GEMINI_API_KEY` | ✅ | From Google AI Studio |
 | `GROQ_API_KEY` | ⚠️ | Recommended — fallback when Gemini is rate-limited |
+| `CLIENT_URL` | ✅ | Origin(s) allowed to call the API with credentials. Comma-separate for multiple. |
+| `COOKIE_SAMESITE` | — | `Lax` (default). Use `None` only when the SPA and API are on different sites; implies `Secure`. |
+| `COOKIE_DOMAIN` | — | Set to share the refresh cookie across subdomains, e.g. `.yourdomain.com`. |
+| `TRUST_PROXY_HOPS` | — | Proxy hops in front of the API (default `1`). Needed for correct client IPs behind nginx or a PaaS router. |
+| `MONGODB_TLS_ALLOW_INVALID_CERTS` | — | Disables TLS certificate verification. Local workaround for the Node 22 + Atlas + Windows issue — **never enable in production**. |
+| `SENDGRID_API_KEY` / `FROM_EMAIL` | — | Only needed for email alert delivery. |
+
+Docker Compose additionally reads `MONGO_ROOT_USER`, `MONGO_ROOT_PASSWORD`,
+`MONGO_DB`, `MONGO_PORT` and `CLIENT_PORT` from the root `.env`.
+
+---
+
+## 🌐 Deployment
+
+The repository ships production-ready images: the API runs as a non-root user on
+Node 22 slim with a `/api/health` probe and graceful SIGTERM shutdown, and the
+front end is a static Vite build served by nginx.
+
+### Single host (Docker Compose)
+
+```bash
+git clone https://github.com/AniketB26/What-I-Signed.git
+cd What-I-Signed
+cp .env.example .env          # fill in secrets and real API keys
+docker compose up -d --build
+```
+
+Put a TLS terminator (Caddy, Traefik, or nginx with certbot) in front of port
+`8080` and point it at your domain. Then set in `.env`:
+
+```env
+NODE_ENV=production
+CLIENT_URL=https://yourdomain.com
+```
+
+### Split hosting (managed platforms)
+
+Deploying the API and the SPA separately — for example Render/Railway/Fly for the
+API and Vercel/Netlify for the front end — needs three changes, because the
+browser then treats the cookie as cross-site:
+
+**API service**
+```env
+NODE_ENV=production
+CLIENT_URL=https://your-frontend.vercel.app
+COOKIE_SAMESITE=None          # required cross-site; forces Secure
+MONGODB_URI=<your Atlas SRV string>
+```
+Point the platform's health check at `/api/health`.
+
+**Front end** — build with the API origin baked in, since Vite inlines env vars
+at build time:
+```bash
+VITE_API_URL=https://your-api.onrender.com npm run build --workspace=client
+```
+
+Both origins must be served over HTTPS: `SameSite=None` requires `Secure`, and
+browsers reject a `Secure` cookie sent over plain HTTP.
+
+### Pre-deploy checklist
+
+- [ ] `JWT_SECRET` and `JWT_REFRESH_SECRET` are fresh 64-char random hex values, different from each other
+- [ ] `MONGODB_TLS_ALLOW_INVALID_CERTS` is unset or `false`
+- [ ] `CLIENT_URL` exactly matches the browser's origin (scheme included — no trailing slash)
+- [ ] MongoDB is reachable from the API host (Atlas IP allowlist covers it)
+- [ ] Pinecone index exists with 768 dimensions and cosine metric
+- [ ] `NODE_ENV=production`
+- [ ] No `.env` file is committed — `git check-ignore .env` should print `.env`
 
 ---
 

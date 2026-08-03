@@ -1,0 +1,76 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: wis-mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:-changeme}
+      MONGO_INITDB_DATABASE: ${MONGO_DB:-whatisigned}
+    volumes:
+      - mongo-data:/data/db
+    # Bound to localhost only — the API reaches Mongo over the compose network,
+    # so this port is purely for your own mongosh/Compass access.
+    # Defaults to 27018 so it doesn't collide with a MongoDB already installed
+    # on the host (which owns 27017). Override with MONGO_PORT.
+    ports:
+      - "127.0.0.1:${MONGO_PORT:-27018}:27017"
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 15s
+      # mongosh is a Node binary and regularly needs >5s just to start inside
+      # the container, so a short timeout reports a healthy mongod as failing.
+      timeout: 20s
+      retries: 10
+      start_period: 40s
+
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    container_name: wis-server
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      # The browser talks to nginx on :8080, so that is the origin the API sees.
+      CLIENT_URL: ${CLIENT_URL:-http://localhost:8080}
+      # authSource=admin because the user is created in the admin database.
+      MONGODB_URI: mongodb://${MONGO_ROOT_USER:-root}:${MONGO_ROOT_PASSWORD:-changeme}@mongo:27017/${MONGO_DB:-whatisigned}?authSource=admin
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required — see .env.example}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:?JWT_REFRESH_SECRET is required — see .env.example}
+      PINECONE_API_KEY: ${PINECONE_API_KEY:-}
+      PINECONE_INDEX: ${PINECONE_INDEX:-}
+      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME:-}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY:-}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      SENDGRID_API_KEY: ${SENDGRID_API_KEY:-}
+      FROM_EMAIL: ${FROM_EMAIL:-}
+    expose:
+      - "5000"
+    # Publish the API only when you need to hit it directly; nginx already
+    # proxies /api. Uncomment to debug with curl/Postman.
+    # ports:
+    #   - "127.0.0.1:5000:5000"
+
+  client:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+      args:
+        # Empty → the bundle calls /api on its own origin and nginx proxies it.
+        VITE_API_URL: ""
+    container_name: wis-client
+    restart: unless-stopped
+    depends_on:
+      - server
+    ports:
+      - "${CLIENT_PORT:-8080}:80"
+
+volumes:
+  mongo-data:

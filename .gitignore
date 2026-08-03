@@ -1,17 +1,25 @@
 # Dependencies
 node_modules/
 
-# Environment variables
+# Environment variables — .env.example is the only one that ships
 .env
 .env.local
 .env.development
 .env.production
 .env.*.local
+.env.backup
 server/.env
+server/.env.backup
+client/.env
+!.env.example
 
 # Build output
 client/dist/
 server/dist/
+
+# Docker — local compose overrides stay local
+docker-compose.override.yml
+.docker/
 
 # Logs
 *.log
