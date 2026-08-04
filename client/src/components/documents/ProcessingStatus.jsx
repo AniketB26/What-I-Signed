@@ -3,6 +3,9 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 
 const stages = {
+  // The upload endpoint creates the document as 'queued'; without an entry
+  // here it fell through to 'uploaded' and read as a stalled 10%.
+  queued: { label: 'Queued', progress: 10 },
   uploaded: { label: 'Uploaded', progress: 10 },
   extracting: { label: 'Extracting text', progress: 30 },
   chunking: { label: 'Chunking content', progress: 50 },
